@@ -8,13 +8,16 @@
     "start": "nodemon dist/server.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "format:check": "prettier . --check",
+    "format:fix": "prettier . --fix",
     "prepare": "husky"
   },
   "author": "",
   "license": "ISC",
   "lint-staged": {
     "*.ts": [
-      "npm run lint:fix"
+      "npm run lint:fix",
+      "npm run format:fix"
     ]
   },
   "description": "",
@@ -33,6 +36,8 @@
     "@eslint/js": "^9.11.0",
     "@types/eslint__js": "^8.42.3",
     "eslint": "^9.11.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "3.3.3",
     "typescript-eslint": "^8.6.0"
   }
 }

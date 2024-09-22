@@ -12,6 +12,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@types/node": "^22.5.5",
     "crud_using_folderstructiure_typescript_nodejs_and_express": "file:",
     "husky": "^9.1.6",

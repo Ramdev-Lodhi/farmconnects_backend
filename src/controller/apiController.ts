@@ -1,13 +1,14 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
+import httpResponse from '../util/httpResponse'
+import responseMessage from '../constant/responseMessage'
+import httpError from '../util/httpError'
 
 export default {
-    self: (_: Request, res: Response) => {
+    self: (req: Request, res: Response, next: NextFunction) => {
         try {
-            res.sendStatus(200)
+            httpResponse(req, res, 200, responseMessage.SUCCESS, { id: 'id' })
         } catch (err) {
-            if (err) {
-                res.sendStatus(500)
-            }
+            httpError(next, err, req, 500)
         }
     }
 }

@@ -4,6 +4,7 @@ import app from './app'
 const server = app.listen(config.PORT)
 ;(() => {
     try {
+        // eslint-disable-next-line no-console
         console.info('Application Started', {
             meta: {
                 PORT: config.PORT,
@@ -11,9 +12,11 @@ const server = app.listen(config.PORT)
             }
         })
     } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Application Error', { meta: err })
         server.close((error) => {
             if (error) {
+                // eslint-disable-next-line no-console
                 console.error('Application Error', { meta: err })
             }
 

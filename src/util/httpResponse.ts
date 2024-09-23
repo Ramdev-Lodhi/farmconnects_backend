@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { THttpResponse } from '../types/types'
 import config from '../config/config'
 import { EApplicationEnvironment } from '../constant/application'
+import logger from './logger'
 
 export default (req: Request, res: Response, responseStatusCode: number, responseMessage: string, data: unknown = null): void => {
     const response: THttpResponse = {
@@ -15,8 +16,8 @@ export default (req: Request, res: Response, responseStatusCode: number, respons
         message: responseMessage,
         data: data
     }
-    // eslint-disable-next-line no-console
-    console.info('Controller Response', {
+
+    logger.info('Controller Response', {
         meta: response
     })
 

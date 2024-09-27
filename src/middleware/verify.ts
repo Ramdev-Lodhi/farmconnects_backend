@@ -4,7 +4,7 @@ import httpError from '../util/httpError'
 
 module.exports = (req: Request, res: Response, next: NextFunction) => {
     if (req.session && req.session) {
-        next()
+        return next()
     } else {
         httpError(next, responseMessage.USER_NOT_ATHURIZED, req, 401)
     }

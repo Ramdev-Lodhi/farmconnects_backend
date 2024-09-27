@@ -7,6 +7,7 @@ import logger from './logger'
 
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export default (err: Error | unknown, req: Request, errorStatusCode: number = 500): THttpError => {
+    logger.info('httpError', err)
     const errorObj: THttpError = {
         success: false,
         statusCode: errorStatusCode,

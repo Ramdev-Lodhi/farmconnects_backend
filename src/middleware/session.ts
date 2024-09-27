@@ -1,6 +1,6 @@
-import Session from 'express-session'
+import session from 'express-session'
 
-export default Session({
+export default session({
     secret: 'Ram_',
     resave: false,
     saveUninitialized: true,

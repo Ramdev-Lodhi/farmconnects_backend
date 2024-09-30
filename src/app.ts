@@ -2,6 +2,7 @@ import express, { Application, NextFunction, Request, Response } from 'express'
 import path from 'path'
 import router from './router/index'
 import globalErrorHandler from './middleware/globalErrorHandler'
+
 import responseMessage from './constant/responseMessage'
 import httpError from './util/httpError'
 import helmet from 'helmet'
@@ -19,6 +20,7 @@ app.use(
         credentials: true
     })
 )
+
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '../', 'public')))
 app.use(session)
@@ -57,4 +59,5 @@ app.use((req: Request, _: Response, next: NextFunction) => {
 })
 
 app.use(globalErrorHandler)
+
 export default app

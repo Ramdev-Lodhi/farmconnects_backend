@@ -21,3 +21,9 @@ export type THttpError = {
     data: unknown
     trace?: object | null
 }
+
+export type user = {
+    id: string
+    name: string
+    email: string
+}

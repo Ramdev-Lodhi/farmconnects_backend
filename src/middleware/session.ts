@@ -4,5 +4,5 @@ export default session({
     secret: 'Ram_',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false, maxAge: 6000000 }
+    cookie: { secure: false, maxAge: 60 * 60 * 1000 }
 })

@@ -7,7 +7,7 @@ import logger from './logger'
 export default (req: Request, res: Response, responseStatusCode: number, responseMessage: string, data: unknown = null): void => {
     const response: THttpResponse = {
         success: true,
-        statusCode: responseStatusCode,
+        statusCode: responseStatusCode || 200,
         request: {
             ip: req.ip || null,
             method: req.method,

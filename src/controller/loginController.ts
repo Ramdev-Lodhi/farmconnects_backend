@@ -7,7 +7,7 @@ import Login from '../model/login.Model'
 import { ISession } from '../types/session'
 import logger from '../util/logger'
 import asyncHandler from 'express-async-handler'
-import jwtUtils from '../util/jwt'
+import jwtUtils from '../service/jwt'
 
 export default {
     registerUser: asyncHandler(async (req: Request, res: Response) => {

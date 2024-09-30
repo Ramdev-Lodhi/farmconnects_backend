@@ -37,9 +37,12 @@ const registerSchema = new mongoose.Schema({
         trim: true,
         lowercase: true
     },
-    password: {
-        type: String,
-        required: true
+    // password: {
+    //     type: String,
+    //     required: true
+    // },
+    image: {
+        type: String
     }
     // pincode: {
     //     type: Number,

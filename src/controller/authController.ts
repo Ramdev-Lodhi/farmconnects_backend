@@ -3,15 +3,15 @@ import httpResponse from '../util/httpResponse'
 import responseMessage from '../constant/responseMessage'
 import httpError from '../util/httpError'
 import { ISession } from '../types/session'
-import logger from '../util/logger'
 import asyncHandler from 'express-async-handler'
 import jwtToken from '../service/jwtService'
 import userService from '../service/userService'
 import { Login, Register } from '../model/UserM'
+
 export default {
     registerUser: asyncHandler(async (req: Request, res: Response) => {
-        const userData = new Register(req.body)
-        const { email, password } = new Login(req.body)
+        const { email, mobile, name } = new Register(req.body)
+        const { password } = new Login(req.body)
 
         const userExist = await Register.findOne({ email })
         if (userExist) {
@@ -22,9 +22,15 @@ export default {
             email: email,
             password: hashedpassword
         }
-
+        const imagePath = req.file ? `uploads/userImages/${req.file.filename}` : `uploads/userImages/user.jpg`
+        const userData = new Register({
+            name,
+            mobile,
+            email,
+            image: imagePath
+        })
         await new Login(loginData).save()
-        const saveUser = await userData.save()
+        const saveUser = await new Register(userData).save()
         httpResponse(req, res, 200, responseMessage.USER_CREATED, saveUser)
     }),
 
@@ -39,11 +45,7 @@ export default {
         // if (!userExist || password !== userExist.password) {
         //     return httpError(next, responseMessage.LOGIN_FAILED, req, 401)
         // }
-        logger.info('passvalid', {
-            meta: {
-                isPasswordValid
-            }
-        })
+
         if (!isPasswordValid) {
             return httpError(next, responseMessage.LOGIN_FAILED, req, 401)
         }
@@ -68,15 +70,8 @@ export default {
                 Email: email
             }
         } else {
-            logger.info(email)
             return httpError(next, 'Session not initialized', req, 500)
         }
-        logger.info('USER DATA', {
-            meta: {
-                USERDATA: (req.session as ISession).user
-            }
-        })
-
         httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, { userInfo, token })
     }),
 

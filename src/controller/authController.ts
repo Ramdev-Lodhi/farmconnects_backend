@@ -22,7 +22,7 @@ export default {
             email: email,
             password: hashedpassword
         }
-        const imagePath = req.file ? `uploads/userImages/${req.file.filename}` : `uploads/userImages/user.jpg`
+        const imagePath = req.file ? `public/uploads/userImages/${req.file.filename}` : `public/uploads/userImages/user.jpg`
         const userData = new Register({
             name,
             mobile,

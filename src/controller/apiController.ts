@@ -26,6 +26,7 @@ export default {
         const saveUser = await userData.save()
         httpResponse(req, res, 200, responseMessage.USER_CREATED, saveUser)
     }),
+
     updateUser: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const id = req.params.id
         const userExist = await Register.findOne({ _id: id })

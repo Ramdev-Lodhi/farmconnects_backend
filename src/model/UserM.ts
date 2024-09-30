@@ -55,6 +55,6 @@ const registerSchema = new mongoose.Schema({
 })
 
 const Login = mongoose.model('Login', loginSchema)
-const Register = mongoose.model('Register', registerSchema)
+const Register = mongoose.model('User', registerSchema)
 
 export { Login, Register }

@@ -1,6 +1,6 @@
 // middleware/auth.js
 import { NextFunction, Request, Response } from 'express'
-import jwtUtils from '../service/jwt'
+import jwtUtils from '../service/jwtService'
 import asyncHandler from 'express-async-handler'
 
 const authenticate = asyncHandler((req: Request, res: Response, next: NextFunction): void => {

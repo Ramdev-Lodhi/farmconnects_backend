@@ -2,20 +2,18 @@ import { NextFunction, Request, Response } from 'express'
 import httpResponse from '../util/httpResponse'
 import responseMessage from '../constant/responseMessage'
 import httpError from '../util/httpError'
-import User from '../model/user.Model'
-import Login from '../model/login.Model'
 import { ISession } from '../types/session'
 import logger from '../util/logger'
 import asyncHandler from 'express-async-handler'
-import jwtToken from '../service/jwt'
+import jwtToken from '../service/jwtService'
 import userService from '../service/userService'
-
+import { Login, Register } from '../model/UserM'
 export default {
     registerUser: asyncHandler(async (req: Request, res: Response) => {
-        const userData = new User(req.body)
+        const userData = new Register(req.body)
         const { email, password } = new Login(req.body)
 
-        const userExist = await User.findOne({ email })
+        const userExist = await Register.findOne({ email })
         if (userExist) {
             return httpResponse(req, res, 200, responseMessage.USER_EXIST, email)
         }
@@ -50,7 +48,7 @@ export default {
             return httpError(next, responseMessage.LOGIN_FAILED, req, 401)
         }
 
-        const userInfo = await User.findOne({ email })
+        const userInfo = await Register.findOne({ email })
         if (!userInfo) {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import loginRoute from './loginRouter'
+import loginRoute from './authRouter'
 import userRoute from './apiRouter'
 import healthRoute from './healthRouter'
 const router = Router()

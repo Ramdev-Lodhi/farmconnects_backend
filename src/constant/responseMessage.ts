@@ -11,7 +11,7 @@ export default {
     USER_DELETED: 'User deleted successfully',
     USERS_FETCHED: 'Users fetched successfully',
     USER_NOT_ATHURIZED: (entity: string) => `Please ${entity} ....`,
-    LOGIN_SUCCESS: `Login Successfully `,
+    LOGIN_SUCCESS: `Login Successfully`,
     LOGIN_FAILED: `Invalid email or password`,
     LOGOUT: 'Logout Successfully',
     LOGOUT_FAILED: 'Failed to log out.'

@@ -8,6 +8,6 @@ router.route('/').post(auth, apiController.insertUser)
 router.route('/').get(auth, apiController.getUsers)
 router.route('/:id').get(verify, apiController.getUserbyID)
 router.route('/:id').put(verify, apiController.updateUser)
-router.route('/:id').delete(verify, apiController.deleteUser)
+router.route('/:id').delete(auth, apiController.deleteUser)
 
 export default router

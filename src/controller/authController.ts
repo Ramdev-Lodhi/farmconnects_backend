@@ -22,7 +22,7 @@ export default {
             email: email,
             password: hashedpassword
         }
-        const imagePath = req.file ? `public/uploads/userImages/${req.file.filename}` : `public/uploads/userImages/user.jpg`
+        const imagePath = req.file ? `uploads/userImages/${req.file.filename}` : `uploads/userImages/user.jpg`
         const userData = new Register({
             name,
             mobile,
@@ -63,16 +63,26 @@ export default {
             mobile: userInfo.mobile
         })
 
-        const name = 'Ramdev'
         if (req.session) {
             ;(req.session as ISession).user = {
-                UserName: name,
+                UserName: userInfo.name,
                 Email: email
             }
         } else {
             return httpError(next, 'Session not initialized', req, 500)
         }
-        httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, { userInfo, token })
+        const data = {
+            id: userInfo._id.toString(),
+            name: userInfo.name,
+            email: userInfo.email,
+            phone: userInfo.mobile,
+            image: userInfo.image,
+            points: 0,
+            credit: 0,
+            token: token
+        }
+
+        httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, data)
     }),
 
     logoutUser: asyncHandler((req: Request, res: Response, next: NextFunction) => {

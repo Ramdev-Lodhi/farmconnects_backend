@@ -72,7 +72,15 @@ export default {
         } else {
             return httpError(next, 'Session not initialized', req, 500)
         }
-        httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, { userInfo, token })
+        const data = {
+            id: userInfo._id.toString(),
+            name: userInfo.name,
+            email: userInfo.email,
+            phone: userInfo.mobile,
+            image: userInfo.image,
+            token: token
+        }
+        httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, data)
     }),
 
     logoutUser: asyncHandler((req: Request, res: Response, next: NextFunction) => {
@@ -90,8 +98,8 @@ export default {
                 return httpError(next, err, req, 500)
             }
 
-            res.clearCookie('connect.sid') // Clear the session cookie
-            res.clearCookie(token) // Clear the token cookie
+            // res.clearCookie('connect.sid') // Clear the session cookie
+            // res.clearCookie(token) // Clear the token cookie
             httpResponse(req, res, 200, responseMessage.LOGOUT)
         })
     })

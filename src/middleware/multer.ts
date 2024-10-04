@@ -5,7 +5,7 @@ import { Request } from 'express'
 
 const storage: StorageEngine = multer.diskStorage({
     destination: function (_: Request, __: Express.Multer.File, cb: (error: Error | null, destination: string) => void) {
-        const uploadPath = path.join(__dirname, '../../public/uploads/userImages')
+        const uploadPath = path.join(__dirname, '../../uploads/userImages')
 
         if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath, { recursive: true })

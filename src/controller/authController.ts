@@ -7,11 +7,13 @@ import asyncHandler from 'express-async-handler'
 import jwtToken from '../service/jwtService'
 import userService from '../service/userService'
 import { Login, Register } from '../model/UserM'
+import { Brand } from '../model/BrandM'
 
 export default {
     registerUser: asyncHandler(async (req: Request, res: Response) => {
         const { email, mobile, name } = new Register(req.body)
         const { password } = new Login(req.body)
+        new Brand(req.body)
 
         const userExist = await Register.findOne({ email })
         if (userExist) {

@@ -25,7 +25,7 @@ const registerSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: function (v: string) {
-                return /^[0-9]{10}$/.test(v) // Example regex for a 10-digit mobile number
+                return /^[0-9]{10}$/.test(v)
             },
             message: (props: { value: string }) => `${props.value} is not a valid mobile number!`
         }
@@ -37,10 +37,7 @@ const registerSchema = new mongoose.Schema({
         trim: true,
         lowercase: true
     },
-    // password: {
-    //     type: String,
-    //     required: true
-    // },
+
     image: {
         type: String
     }

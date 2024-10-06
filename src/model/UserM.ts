@@ -40,18 +40,23 @@ const registerSchema = new mongoose.Schema({
 
     image: {
         type: String
+    },
+    pincode: {
+        type: Number,
+        required: true,
+        validate: {
+            validator: function (v: number) {
+                // Specify v as a number
+                return /^[0-9]{6}$/.test(v.toString()) // Example regex for a 6-digit pincode
+            },
+            message: (props: { value: string }) => `${props.value} is not a valid pincode!`
+        }
+    },
+    city: {
+        type: String,
+        required: true,
+        trim: true
     }
-    // pincode: {
-    //     type: Number,
-    //     required: true,
-    //     validate: {
-    //         validator: function (v: number) {
-    //             // Specify v as a number
-    //             return /^[0-9]{6}$/.test(v.toString()) // Example regex for a 6-digit pincode
-    //         },
-    //         message: (props) => `${props.value} is not a valid pincode!`
-    //     }
-    // }
 })
 
 const Login = mongoose.model('Login', loginSchema)

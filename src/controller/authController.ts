@@ -11,7 +11,7 @@ import { Brand } from '../model/BrandM'
 
 export default {
     registerUser: asyncHandler(async (req: Request, res: Response) => {
-        const { email, mobile, name } = new Register(req.body)
+        const { email, mobile, name, city, pincode } = new Register(req.body)
         const { password } = new Login(req.body)
         new Brand(req.body)
 
@@ -29,6 +29,8 @@ export default {
             name,
             mobile,
             email,
+            city,
+            pincode,
             image: imagePath
         })
         await new Login(loginData).save()

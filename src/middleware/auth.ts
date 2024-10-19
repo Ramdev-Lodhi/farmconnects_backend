@@ -8,17 +8,17 @@ const authenticate = asyncHandler((req: Request, res: Response, next: NextFuncti
 
     if (!token) {
         res.status(401).json({ error: 'No token provided' })
-        return // Sends response and exits
+        return
     }
 
     try {
-        const decoded = jwtUtils.verifyToken(token) // Verify and decode the token
-        req.user = decoded // Attach decoded info to the request object
-        next() // Proceed to the next middleware or route handler
+        const decoded = jwtUtils.verifyToken(token)
+        req.user = decoded
+        next()
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-        res.status(401).json({ error: 'Token is invalid or expired' }) // Sends response and exits
+        res.status(401).json({ error: 'Token is invalid or expired' })
     }
 })
 

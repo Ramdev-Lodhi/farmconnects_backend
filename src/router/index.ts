@@ -2,6 +2,7 @@ import { Router } from 'express'
 import loginRoute from './authRouter'
 import userRoute from './apiRouter'
 import healthRoute from './healthRouter'
+import adminRouter from './adminRouter'
 const router = Router()
 const defaultRoutes = [
     {
@@ -15,6 +16,10 @@ const defaultRoutes = [
     {
         path: '/user',
         route: userRoute
+    },
+    {
+        path: '/admin',
+        route: adminRouter
     }
 ]
 

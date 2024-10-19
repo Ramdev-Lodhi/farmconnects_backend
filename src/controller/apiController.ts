@@ -3,7 +3,6 @@ import httpResponse from '../util/httpResponse'
 import responseMessage from '../constant/responseMessage'
 import httpError from '../util/httpError'
 import { Register } from '../model/UserM'
-import logger from '../util/logger'
 import expressAsyncHandler from 'express-async-handler'
 
 export default {
@@ -40,12 +39,22 @@ export default {
 
     deleteUser: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const id = req.params.id
-        logger.info(id)
         const userExist = await Register.findOne({ _id: id })
         if (!userExist) {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }
         await Register.findByIdAndDelete(id)
         httpResponse(req, res, 200, responseMessage.USER_DELETED)
+    }),
+
+    updateImage: expressAsyncHandler(async (req: Request, res: Response) => {
+        const id = req.params.id
+        const image = req.file ? req.file.path : `https://res.cloudinary.com/farmconnects/image/upload/v1728409875/user_.jpg`
+        const updatedUser = await Register.findByIdAndUpdate(id, { image }, { new: true })
+        if (!updatedUser) {
+            return httpResponse(req, res, 404, 'User not found')
+        }
+
+        httpResponse(req, res, 200, 'Image Upload Successful', updatedUser)
     })
 }

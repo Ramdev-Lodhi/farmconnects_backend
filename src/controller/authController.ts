@@ -7,13 +7,11 @@ import asyncHandler from 'express-async-handler'
 import jwtToken from '../service/jwtService'
 import userService from '../service/userService'
 import { Login, Register } from '../model/UserM'
-import { Brand } from '../model/BrandM'
 
 export default {
     registerUser: asyncHandler(async (req: Request, res: Response) => {
         const { email, mobile, name, city, pincode } = new Register(req.body)
         const { password } = new Login(req.body)
-        new Brand(req.body)
 
         const userExist = await Register.findOne({ email })
         if (userExist) {
@@ -24,7 +22,7 @@ export default {
             email: email,
             password: hashedpassword
         }
-        const imagePath = req.file ? `uploads/userImages/${req.file.filename}` : `uploads/userImages/user.jpg`
+        const imagePath = req.file ? req.file.path : `https://res.cloudinary.com/farmconnects/image/upload/v1728409875/user_.jpg`
         const userData = new Register({
             name,
             mobile,
@@ -46,14 +44,9 @@ export default {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }
         const isPasswordValid = await userService.comparePassword(password, userExist.password)
-        // if (!userExist || password !== userExist.password) {
-        //     return httpError(next, responseMessage.LOGIN_FAILED, req, 401)
-        // }
-
         if (!isPasswordValid) {
             return httpError(next, responseMessage.LOGIN_FAILED, req, 401)
         }
-
         const userInfo = await Register.findOne({ email })
         if (!userInfo) {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)

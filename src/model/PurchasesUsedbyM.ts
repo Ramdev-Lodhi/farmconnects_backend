@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 
-const purchasesSchema = new mongoose.Schema({
+const purchasesUsedBySchema = new mongoose.Schema({
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'userM',
@@ -34,11 +34,6 @@ const purchasesSchema = new mongoose.Schema({
         type: Number,
         require: true
     }
-    // quality:{
-    //     type: String,
-    //     require:true,
-    //     trim:true
-    // }
 })
-const Purchase = mongoose.model('Purchases', purchasesSchema)
+const Purchase = mongoose.model('Purchases', purchasesUsedBySchema)
 export { Purchase }

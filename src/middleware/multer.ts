@@ -15,12 +15,15 @@ interface CloudinaryParams {
 const dynamicStorage = (folderName: string) => {
     return new CloudinaryStorage({
         cloudinary: cloudinary,
-        params: (): CloudinaryParams => {
-            const currentTimestamp = Date.now()
+        params: (_: Request, file: Express.Multer.File): CloudinaryParams => {
+            // const currentTimestamp = Date.now()
+            const originalName = file.originalname.replace(/\.[^/.]+$/, '') // Remove file extension
+            const sanitizedFileName = originalName.replace(/\s+/g, '_').toLowerCase()
             return {
                 folder: `farmconnects/${folderName}`,
                 allowed_formats: ['jpeg', 'jpg', 'png', 'webp', 'gif'],
-                public_id: `IMG-${currentTimestamp}`
+                // public_id: `IMG-${currentTimestamp}`
+                public_id: sanitizedFileName
             }
         }
     })

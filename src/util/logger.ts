@@ -98,9 +98,9 @@ const MongodbTransport = (): Array<MongoDBTransportInstance> => {
             db: config.DATABASE_URL as string,
             metaKey: 'meta',
             expireAfterSeconds: 3600 * 24 * 30,
-            // options: {
-            //     useUnifiedTopology: true
-            // },
+            options: {
+                serverSelectionTimeoutMS: 10000
+            },
             collection: 'application-log'
         })
     ]

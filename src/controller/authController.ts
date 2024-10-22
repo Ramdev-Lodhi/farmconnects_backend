@@ -22,7 +22,7 @@ export default {
             email: email,
             password: hashedpassword
         }
-        const imagePath = req.file ? req.file.path : `https://res.cloudinary.com/farmconnects/image/upload/v1728409875/user_.jpg`
+        const imagePath = req.file ? req.file.path : `https://res.cloudinary.com/farmconnects/image/upload/v1728409875/user_kzxegi.jpg`
         const userData = new Register({
             name,
             mobile,

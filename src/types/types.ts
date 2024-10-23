@@ -40,7 +40,16 @@ export interface User {
 
 // Define the Google profile type
 export interface GoogleProfile {
-    displayName: string // User's display name
-    emails: { value: string }[] // User's email(s)
-    photos: { value: string }[] // User's photo(s)
+    user: {
+        id: string
+        displayName: string
+        name: {
+            familyName: string
+            givenName: string
+        }
+        emails: Array<{ value: string; verified: boolean }>
+        photos: Array<{ value: string }>
+        provider: string
+    }
+    token: string
 }

@@ -13,7 +13,7 @@ export default {
     SERVER_URL: process.env.SERVER_URL,
     SESSION_SECRET: process.env.SESSION_SECRET,
     JWT_SECRET: process.env.JWT_SECRET,
-    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientID: process.env.CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK_URL,
     DATABASE_URL: process.env.DATABASE_URL

@@ -8,6 +8,7 @@ import jwtToken from '../service/jwtService'
 import userService from '../service/userService'
 import { Login, Register } from '../model/UserM'
 import { GoogleProfile } from '../types/types'
+import logger from '../util/logger'
 export default {
     registerUser: asyncHandler(async (req: Request, res: Response) => {
         const { email, mobile, name, city, pincode } = new Register(req.body)
@@ -82,13 +83,25 @@ export default {
     }),
     googleLogin: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const userInfo = req.user as GoogleProfile // Cast req.user to GoogleProfile
-
+        logger.info('Google Data', {
+            meta: {
+                email: userInfo.user?.emails?.[0]?.value
+            }
+        })
         if (!userInfo) {
             return httpError(next, 'User information is not available', req, 401)
         }
 
+        // Safely access emails and photos using optional chaining
+        const userEmail = userInfo.user?.emails?.[0]?.value || ''
+        const userPhoto = userInfo.user?.photos?.[0]?.value || ''
+        logger.info('Google Data', {
+            meta: {
+                userEmail
+            }
+        })
         // Check if the user already exists using the email
-        const userExists = await Register.findOne({ email: userInfo.emails[0].value })
+        const userExists = await Register.findOne({ email: userEmail })
 
         let userId
         let mobile = '' // Default value for mobile
@@ -96,35 +109,41 @@ export default {
         if (!userExists) {
             // Create a new user if they do not exist
             const newUser = new Register({
-                name: userInfo.displayName,
-                email: userInfo.emails[0].value,
-                image: userInfo.photos[0]?.value || '', // Correctly access the image
-                mobile: '' // Assign a default or leave it empty if necessary
+                name: userInfo.user?.displayName,
+                email: userEmail,
+                image: userPhoto,
+                mobile: 8815225624,
+                pincode: 470335,
+                city: 'null'
             })
 
             await newUser.save()
-            userId = newUser._id.toString() // Get the new user's ID
+            userId = newUser._id.toString()
         } else {
-            userId = userExists._id.toString() // Get existing user's ID
-            mobile = userExists.mobile // Access mobile if it exists
+            userId = userExists._id.toString()
+            mobile = userExists.mobile
         }
 
         // Generate a JWT token
         const token = jwtToken.generateToken({
             id: userId,
-            email: userInfo.emails[0].value,
-            name: userInfo.displayName,
-            mobile // Use the mobile variable which will be an empty string if userExists was null
+            email: userEmail,
+            name: userInfo.user?.displayName,
+            mobile
         })
-
-        httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, {
-            token,
+        const data = {
             id: userId,
-            name: userInfo.displayName,
-            email: userInfo.emails[0].value,
-            image: userInfo.photos[0]?.value || '' // Access the image
-        })
+            email: userEmail,
+            name: userInfo.user?.displayName,
+            phone: mobile,
+            image: userPhoto,
+            points: 0,
+            credit: 0,
+            token: token
+        }
+        httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, data)
     }),
+
     logoutUser: asyncHandler((req: Request, res: Response, next: NextFunction) => {
         const authorizationHeader = req.headers.authorization
 

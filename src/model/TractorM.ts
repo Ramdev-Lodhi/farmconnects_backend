@@ -99,6 +99,9 @@ const tractorSchema = new mongoose.Schema({
         RPM: {
             type: String
         }
+    },
+    price: {
+        type: String
     }
 })
 

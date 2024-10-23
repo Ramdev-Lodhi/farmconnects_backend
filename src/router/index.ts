@@ -3,6 +3,7 @@ import loginRoute from './authRouter'
 import userRoute from './apiRouter'
 import healthRoute from './healthRouter'
 import adminRouter from './adminRouter'
+import homeRouter from './homeRouter'
 const router = Router()
 const defaultRoutes = [
     {
@@ -20,6 +21,10 @@ const defaultRoutes = [
     {
         path: '/admin',
         route: adminRouter
+    },
+    {
+        path: '/home',
+        route: homeRouter
     }
 ]
 

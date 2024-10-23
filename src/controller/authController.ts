@@ -7,7 +7,7 @@ import asyncHandler from 'express-async-handler'
 import jwtToken from '../service/jwtService'
 import userService from '../service/userService'
 import { Login, Register } from '../model/UserM'
-
+import { GoogleProfile } from '../types/types'
 export default {
     registerUser: asyncHandler(async (req: Request, res: Response) => {
         const { email, mobile, name, city, pincode } = new Register(req.body)
@@ -80,7 +80,51 @@ export default {
         }
         httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, data)
     }),
+    googleLogin: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const userInfo = req.user as GoogleProfile // Cast req.user to GoogleProfile
 
+        if (!userInfo) {
+            return httpError(next, 'User information is not available', req, 401)
+        }
+
+        // Check if the user already exists using the email
+        const userExists = await Register.findOne({ email: userInfo.emails[0].value })
+
+        let userId
+        let mobile = '' // Default value for mobile
+
+        if (!userExists) {
+            // Create a new user if they do not exist
+            const newUser = new Register({
+                name: userInfo.displayName,
+                email: userInfo.emails[0].value,
+                image: userInfo.photos[0]?.value || '', // Correctly access the image
+                mobile: '' // Assign a default or leave it empty if necessary
+            })
+
+            await newUser.save()
+            userId = newUser._id.toString() // Get the new user's ID
+        } else {
+            userId = userExists._id.toString() // Get existing user's ID
+            mobile = userExists.mobile // Access mobile if it exists
+        }
+
+        // Generate a JWT token
+        const token = jwtToken.generateToken({
+            id: userId,
+            email: userInfo.emails[0].value,
+            name: userInfo.displayName,
+            mobile // Use the mobile variable which will be an empty string if userExists was null
+        })
+
+        httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, {
+            token,
+            id: userId,
+            name: userInfo.displayName,
+            email: userInfo.emails[0].value,
+            image: userInfo.photos[0]?.value || '' // Access the image
+        })
+    }),
     logoutUser: asyncHandler((req: Request, res: Response, next: NextFunction) => {
         const authorizationHeader = req.headers.authorization
 

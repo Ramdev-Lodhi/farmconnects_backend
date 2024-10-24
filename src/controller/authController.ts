@@ -7,8 +7,14 @@ import asyncHandler from 'express-async-handler'
 import jwtToken from '../service/jwtService'
 import userService from '../service/userService'
 import { Login, Register } from '../model/UserM'
-import { GoogleProfile } from '../types/types'
-import logger from '../util/logger'
+import { OAuth2Client } from 'google-auth-library'
+import { GOOGLE_CLIENT_ID } from '../config/googleConfig'
+interface GoogleLoginRequest extends Request {
+    body: {
+        token: string // Specify that token is a string
+    }
+}
+const client = new OAuth2Client(GOOGLE_CLIENT_ID)
 export default {
     registerUser: asyncHandler(async (req: Request, res: Response) => {
         const { email, mobile, name, city, pincode } = new Register(req.body)
@@ -81,37 +87,28 @@ export default {
         }
         httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, data)
     }),
-    googleLogin: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const userInfo = req.user as GoogleProfile // Cast req.user to GoogleProfile
-        logger.info('Google Data', {
-            meta: {
-                email: userInfo.user?.emails?.[0]?.value
-            }
+    googleLogin: asyncHandler(async (req: GoogleLoginRequest, res: Response) => {
+        const { token } = req.body
+        // const { token }: { token: string } = req.body
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: GOOGLE_CLIENT_ID
         })
-        if (!userInfo) {
-            return httpError(next, 'User information is not available', req, 401)
+        const payload = ticket.getPayload()
+        if (!payload || !payload.email || !payload.name) {
+            return httpResponse(req, res, 400, 'Email or name is missing from the token payload.')
         }
-
-        // Safely access emails and photos using optional chaining
-        const userEmail = userInfo.user?.emails?.[0]?.value || ''
-        const userPhoto = userInfo.user?.photos?.[0]?.value || ''
-        logger.info('Google Data', {
-            meta: {
-                userEmail
-            }
-        })
-        // Check if the user already exists using the email
-        const userExists = await Register.findOne({ email: userEmail })
-
+        const email = payload?.email ?? ''
+        const name = payload?.name ?? ''
+        const picture = payload?.picture
+        const userExists = await Register.findOne({ email: email })
         let userId
-        let mobile = '' // Default value for mobile
-
+        let mobile = ''
         if (!userExists) {
-            // Create a new user if they do not exist
             const newUser = new Register({
-                name: userInfo.user?.displayName,
-                email: userEmail,
-                image: userPhoto,
+                name: name,
+                email: email,
+                image: picture,
                 mobile: 8815225624,
                 pincode: 470335,
                 city: 'null'
@@ -125,21 +122,21 @@ export default {
         }
 
         // Generate a JWT token
-        const token = jwtToken.generateToken({
+        const jwttoken = jwtToken.generateToken({
             id: userId,
-            email: userEmail,
-            name: userInfo.user?.displayName,
+            email: email,
+            name: name,
             mobile
         })
         const data = {
             id: userId,
-            email: userEmail,
-            name: userInfo.user?.displayName,
+            email: email,
+            name: name,
             phone: mobile,
-            image: userPhoto,
+            image: picture,
             points: 0,
             credit: 0,
-            token: token
+            token: jwttoken
         }
         httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, data)
     }),

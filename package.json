@@ -47,6 +47,7 @@
         "rate-limiter-flexible": "^5.0.3",
         "source-map-support": "^0.5.21",
         "ts-migrate-mongoose": "^3.8.4",
+        "twilio": "^5.3.5",
         "winston": "^3.14.2",
         "winston-mongodb": "^6.0.0"
     },
@@ -66,6 +67,7 @@
         "@types/passport": "^1.0.16",
         "@types/passport-google-oauth20": "^2.0.16",
         "@types/source-map-support": "^0.5.10",
+        "@types/twilio": "^3.19.2",
         "eslint": "^9.11.1",
         "eslint-config-prettier": "^9.1.0",
         "husky": "^9.1.6",

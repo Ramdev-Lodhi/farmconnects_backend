@@ -31,9 +31,12 @@ const dynamicStorage = (folderName: string) => {
 
 // Check file type function
 function checkFileType(file: Express.Multer.File, cb: FileFilterCallback) {
-    const filetypes = /jpeg|jpg|png|webp|gif/
+    const filetypes = /jpeg|jpg|png|webp|gif|application\/octet-stream/
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase())
     const mimetype = filetypes.test(file.mimetype)
+    // console.log(`File uploaded: ${file.originalname}, MIME: ${file.mimetype}`)
+    // console.log('File Extension:', extname)
+    // console.log('MIME Type:', mimetype)
     if (mimetype && extname) {
         return cb(null, true)
     } else {

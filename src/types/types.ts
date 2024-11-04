@@ -25,17 +25,17 @@ export type THttpError = {
 
 export type user = {
     id: string
+    loginid: string
     name: string
     email: string
     mobile: string
 }
 export interface User {
-    _id: string // Assuming you have an ID field
-    name: string // User's display name
-    email: string // User's email address
-    mobile: string // User's mobile number
-    image: string // URL for user's profile image
-    // Add any other relevant fields
+    _id: string
+    name: string
+    email: string
+    mobile: string
+    image: string
 }
 
 // Define the Google profile type

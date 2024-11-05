@@ -4,8 +4,6 @@ import responseMessage from '../constant/responseMessage'
 import httpError from '../util/httpError'
 import { Register, Login } from '../model/UserM'
 import expressAsyncHandler from 'express-async-handler'
-import { Banner } from '../model/Banner'
-import { Brand } from '../model/BrandM'
 import logger from '../util/logger'
 import cloudinary from '../config/cloudinaryConfig'
 import userService from '../service/userService'
@@ -198,36 +196,5 @@ export default {
         }
         await Register.findByIdAndDelete(id)
         httpResponse(req, res, 200, responseMessage.USER_DELETED)
-    }),
-
-    insertBanners: expressAsyncHandler(async (req: Request, res: Response) => {
-        const bannerPath = req.file ? req.file.path : 'https://res.cloudinary.com/farmconnects/image/upload/v1728409875/user_kzxegi.jpg'
-        // Assuming you're creating a new Register entry with the banner image
-        const newData = new Banner({ banner: bannerPath })
-        // Save the data to the database
-        const saveUser = await newData.save()
-
-        httpResponse(req, res, 200, 'Banner Upload Successful', saveUser)
-    }),
-
-    insertBrand: expressAsyncHandler(async (req: Request, res: Response) => {
-        const { name } = new Brand(req.body)
-
-        const brandPath = req.file ? req.file.path : ''
-        // Assuming you're creating a new Register entry with the brand image
-        const newData = new Brand({ logo: brandPath, name: name })
-        // Save the data to the database
-        const saveUser = await newData.save()
-        httpResponse(req, res, 200, 'brand Upload Successful', saveUser)
-    }),
-
-    getHome: expressAsyncHandler(async (req: Request, res: Response) => {
-        const allBanners = await Banner.find()
-        const allBrand = await Brand.find()
-        const data = {
-            banners: allBanners,
-            brands: allBrand
-        }
-        httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
     })
 }

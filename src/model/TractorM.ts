@@ -29,7 +29,7 @@ const tractorSchema = new mongoose.Schema({
             type: Number
         },
         cooling: {
-            typr: String
+            type: String
         },
         fuelType: { type: String }
     },

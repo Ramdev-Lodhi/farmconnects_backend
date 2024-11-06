@@ -11,6 +11,7 @@ const globalErrorHandler = (err: THttpError, _: Request, res: Response, __: Next
     const statusCode = res.statusCode ? res.statusCode : 500
 
     const response = {
+        status: false,
         message: err.message || 'An unexpected error occurred',
         trace: err.trace || 'No trace available',
         error: {

@@ -7,7 +7,8 @@ import { EApplicationEnvironment } from '../constant/application'
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export default (err: Error | unknown, req: Request, errorStatusCode: number = 500): THttpError => {
     const errorObj: THttpError = {
-        success: false,
+        // success: false,
+        status: true,
         statusCode: errorStatusCode,
         request: {
             ip: req.ip || null,

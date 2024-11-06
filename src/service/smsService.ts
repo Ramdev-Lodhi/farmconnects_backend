@@ -1,6 +1,6 @@
 import twilio from 'twilio'
 import dotenv from 'dotenv'
-// import logger from '../util/logger'
+import logger from '../util/logger'
 import config from '../config/config'
 
 dotenv.config()
@@ -16,19 +16,19 @@ export const sendOtpSms = async (phoneNumber: string, otp: string) => {
             to: phoneNumber
         })
 
-        // logger.info('OTP Sent', {
-        //     meta: {
-        //         message: `OTP sent to ${phoneNumber}: ${message.sid}`
-        //     }
-        // })
+        logger.info('OTP Sent', {
+            meta: {
+                message: `OTP sent to ${phoneNumber}: ${message.sid}`
+            }
+        })
         return { success: true, sid: message.sid }
     } catch (error) {
-        // logger.info('Error sending', {
-        //     meta: {
-        //         message: 'Error sending OTP SMS:',
-        //         error
-        //     }
-        // })
+        logger.info('Error sending', {
+            meta: {
+                message: 'Error sending OTP SMS:',
+                error
+            }
+        })
         return { success: false, error }
     }
 }

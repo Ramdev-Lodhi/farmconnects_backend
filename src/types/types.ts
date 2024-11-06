@@ -11,7 +11,8 @@ export type THttpResponse = {
     data: unknown
 }
 export type THttpError = {
-    success: boolean
+    // success: boolean
+    status: boolean
     statusCode: number
     request: {
         ip?: string | null

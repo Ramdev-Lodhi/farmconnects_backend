@@ -11,6 +11,7 @@ export const storeOtp = async (phone: string, otp: string) => {
     try {
         const otpRecord = new OtpModel({ phone, otp })
         await otpRecord.save()
+
         // logger.info('success', {
         //     meta: {
         //         message: `OTP stored successfully`

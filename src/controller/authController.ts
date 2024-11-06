@@ -12,7 +12,7 @@ import { GOOGLE_CLIENT_ID } from '../config/googleConfig'
 import { generateOtp, storeOtp, verifyOtp } from '../service/otpService'
 import { sendOtpSms } from '../service/smsService'
 import { OtpModel } from '../model/otpM'
-import { isNull } from 'util'
+
 // import logger from '../util/logger'
 
 interface GoogleLoginRequest extends Request {
@@ -234,14 +234,17 @@ export default {
         })
     }),
 
-    requestOtp: asyncHandler(async (req: Request, res: Response) => {
+    requestOtp: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const { phone } = new OtpModel(req.body)
 
         const otp = generateOtp()
         await storeOtp(phone, otp)
-        await sendOtpSms(phone, otp)
-
-        httpResponse(req, res, 200, 'OTP sent to your mobile number.')
+        const status = await sendOtpSms(phone, otp)
+        if (status.success) {
+            httpResponse(req, res, 200, 'OTP sent to your mobile number.')
+        } else {
+            httpError(next, 'OTP not sent. Please try again..', req, 500)
+        }
     }),
 
     verifyOtpCode: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -257,8 +260,8 @@ export default {
         let loginuser = await Login.findOne({ mobile: phone })
         if (!user) {
             const newUser = new Register({
-                name: 'Your Name',
-                email: 'someone@gmail.com',
+                name: null,
+                email: null,
                 image: `https://res.cloudinary.com/farmconnects/image/upload/v1728409875/user_kzxegi.jpg`,
                 mobile: phone,
                 pincode: null,
@@ -269,7 +272,7 @@ export default {
             })
 
             const login = new Login({
-                email: isNull,
+                email: null,
                 mobile: phone,
                 password: null
             })

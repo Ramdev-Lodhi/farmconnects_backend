@@ -126,12 +126,20 @@ export default {
         if (!userLoginExist) {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }
-        const { password } = new Login(req.body)
+        const { password, email, mobile } = new Login(req.body)
+        logger.info('password', {
+            meta: {
+                password
+            }
+        })
         const hashedpassword = await userService.registerService(password ?? '')
 
         const loginpassword = {
-            password: hashedpassword
+            password: hashedpassword,
+            email: email,
+            mobile: mobile
         }
+
         await Login.findByIdAndUpdate(data.loginid, loginpassword, { new: true })
         httpResponse(req, res, 200, responseMessage.USER_UPDATED, userData)
     }),

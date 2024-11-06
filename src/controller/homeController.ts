@@ -10,7 +10,12 @@ export default {
     getHome: expressAsyncHandler(async (req: Request, res: Response) => {
         const allBanners = await Banner.find()
         const allBrand = await Brand.find()
-        const Tractors = await Tractor.find()
+        // const Tractors = await Tractor.find()
+        // const Tractors = await Tractor.find().sort({ $natural: -1 }).exec()
+        const totalCount = await Tractor.countDocuments()
+
+        // Use $sample to get all tractors in a random order
+        const Tractors = await Tractor.aggregate([{ $sample: { size: totalCount } }])
         const data = {
             banners: allBanners,
             brands: allBrand,

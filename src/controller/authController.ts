@@ -10,8 +10,9 @@ import { Login, Register } from '../model/UserM'
 import { OAuth2Client } from 'google-auth-library'
 import { GOOGLE_CLIENT_ID } from '../config/googleConfig'
 import { generateOtp, storeOtp, verifyOtp } from '../service/otpService'
-import { sendOtpSms } from '../service/smsService'
+// import { sendOtpSms } from '../service/smsService'
 import { OtpModel } from '../model/otpM'
+import logger from '../util/logger'
 
 // import logger from '../util/logger'
 
@@ -238,9 +239,11 @@ export default {
         const { phone } = new OtpModel(req.body)
 
         const otp = generateOtp()
+        logger.info('phone', { meta: { phone, otp } })
         await storeOtp(phone, otp)
-        const status = await sendOtpSms(phone, otp)
-        if (status.success) {
+        // const status = await sendOtpSms(phone, otp)
+        const status = true
+        if (status) {
             httpResponse(req, res, 200, 'OTP sent to your mobile number.')
         } else {
             httpError(next, 'OTP not sent. Please try again..', req, 500)
@@ -255,6 +258,8 @@ export default {
         if (!isValid) {
             return httpError(next, 'Invalid OTP', req, 500)
         }
+
+        //    const mobile = phone.slice(3); // Remove the first three characters
 
         let user = await Register.findOne({ mobile: phone })
         let loginuser = await Login.findOne({ mobile: phone })

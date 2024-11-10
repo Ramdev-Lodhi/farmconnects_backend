@@ -3,7 +3,7 @@ import { THttpResponse } from '../types/types'
 // import config from '../config/config'
 // import { EApplicationEnvironment } from '../constant/application'
 
-import logger from './logger'
+// import logger from './logger'
 
 export default (_: Request, res: Response, responseStatusCode: number, responseMessage: string, data: unknown = null): void => {
     const response: THttpResponse = {
@@ -18,9 +18,9 @@ export default (_: Request, res: Response, responseStatusCode: number, responseM
         data: data
     }
 
-    logger.info('Controller Response', {
-        meta: response
-    })
+    // logger.info('Controller Response', {
+    //     meta: response
+    // })
 
     // if (config.ENV === EApplicationEnvironment.PRODUCTION) {
     //     delete response.request.ip

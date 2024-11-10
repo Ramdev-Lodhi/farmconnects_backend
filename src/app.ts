@@ -6,7 +6,7 @@ import responseMessage from './constant/responseMessage'
 import httpError from './util/httpError'
 import helmet from 'helmet'
 import cors from 'cors'
-import session from './middleware/session'
+
 import bodyParser from 'body-parser'
 const app: Application = express()
 
@@ -22,7 +22,6 @@ app.use(
 app.use(bodyParser.json())
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '../', 'public')))
-app.use(session)
 
 //Routers
 

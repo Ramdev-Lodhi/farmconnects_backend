@@ -61,17 +61,15 @@ const fileLogFormat = format.printf((info) => {
     const logMeta: Record<string, unknown> = {}
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-     if (meta && typeof meta === 'object') {
-        for (const [key, value] of Object.entries(meta)) {
-            if (value instanceof Error) {
-                logMeta[key] = {
-                    name: value.name,
-                    message: value.message,
-                    trace: value.stack || ''
-                };
-            } else {
-                logMeta[key] = value;
+    for (const [key, value] of Object.entries(meta)) {
+        if (value instanceof Error) {
+            logMeta[key] = {
+                name: value.name,
+                message: value.message,
+                trace: value.stack || ''
             }
+        } else {
+            logMeta[key] = value
         }
     }
     const logData = {

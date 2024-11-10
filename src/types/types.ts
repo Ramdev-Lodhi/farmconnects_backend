@@ -2,11 +2,11 @@ export type THttpResponse = {
     // success: boolean
     status: boolean
     // statusCode: number
-    // request: {
-    // ip?: string | null
-    //     method: string
-    //     url: string
-    // }
+    request: {
+    ip?: string | null
+        method: string
+        url: string
+    }
     message: string
     data: unknown
 }

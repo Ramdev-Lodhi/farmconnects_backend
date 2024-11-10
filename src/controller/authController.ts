@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import httpResponse from '../util/httpResponse'
 import responseMessage from '../constant/responseMessage'
 import httpError from '../util/httpError'
-// import { ISession } from '../types/session'
 import asyncHandler from 'express-async-handler'
 import jwtToken from '../service/jwtService'
 import userService from '../service/userService'
@@ -10,11 +9,9 @@ import { Login, Register } from '../model/UserM'
 import { OAuth2Client } from 'google-auth-library'
 import { GOOGLE_CLIENT_ID } from '../config/googleConfig'
 import { generateOtp, storeOtp, verifyOtp } from '../service/otpService'
-// import { sendOtpSms } from '../service/smsService'
+import { sendOtpSms } from '../service/smsService'
 import { OtpModel } from '../model/otpM'
 import logger from '../util/logger'
-
-// import logger from '../util/logger'
 
 interface GoogleLoginRequest extends Request {
     body: {
@@ -80,14 +77,6 @@ export default {
             mobile: userInfo.mobile ?? ''
         })
 
-        // if (req.session) {
-        //     ;(req.session as ISession).user = {
-        //         UserName: userInfo.name,
-        //         Email: email
-        //     }
-        // } else {
-        //     return httpError(next, 'Session not initialized', req, 500)
-        // }
         const data = {
             _id: userInfo._id.toString(),
             name: userInfo.name,
@@ -131,14 +120,6 @@ export default {
             mobile: userInfo.mobile ?? ''
         })
 
-        // if (req.session) {
-        //     ;(req.session as ISession).user = {
-        //         UserName: userInfo.name,
-        //         Email: email
-        //     }
-        // } else {
-        //     return httpError(next, 'Session not initialized', req, 500)
-        // }
         const data = {
             id: userInfo._id.toString(),
             name: userInfo.name,
@@ -229,8 +210,6 @@ export default {
                 return httpError(next, err, req, 500)
             }
 
-            // res.clearCookie('connect.sid') // Clear the session cookie
-            // res.clearCookie(token) // Clear the token cookie
             httpResponse(req, res, 200, responseMessage.LOGOUT)
         })
     }),
@@ -241,8 +220,7 @@ export default {
         const otp = generateOtp()
         logger.info('phone', { meta: { phone, otp } })
         await storeOtp(phone, otp)
-        // const status = await sendOtpSms(phone, otp)
-        const status = true
+        const status = await sendOtpSms(phone, otp)
         if (status) {
             httpResponse(req, res, 200, 'OTP sent to your mobile number.')
         } else {

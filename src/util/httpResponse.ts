@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { THttpResponse } from '../types/types'
-// import config from '../config/config'
-// import { EApplicationEnvironment } from '../constant/application'
+import config from '../config/config'
+import { EApplicationEnvironment } from '../constant/application'
 
 // import logger from './logger'
 
@@ -18,13 +18,13 @@ export default (_: Request, res: Response, responseStatusCode: number, responseM
         data: data
     }
 
-    // logger.info('Controller Response', {
-    //     meta: response
-    // })
+    logger.info('Controller Response', {
+        meta: response
+    })
 
-    // if (config.ENV === EApplicationEnvironment.PRODUCTION) {
-    //     delete response.request.ip
-    // }
+    if (config.ENV === EApplicationEnvironment.PRODUCTION) {
+        delete response.request.ip
+    }
 
     res.status(responseStatusCode).json(response)
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 import { NextFunction, Request, Response } from 'express'
 import config from '../config/config'
 import { EApplicationEnvironment } from '../constant/application'

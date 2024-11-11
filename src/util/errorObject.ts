@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 import { Request } from 'express'
 import { THttpError } from '../types/types'
 import responseMessage from '../constant/responseMessage'

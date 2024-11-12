@@ -4,5 +4,6 @@ import auth from '../middleware/auth'
 const router = Router()
 
 router.route('/').get(auth, homeController.getHome)
+router.route('/getItemByBrand').get(auth, homeController.getItemByBrand)
 
 export default router

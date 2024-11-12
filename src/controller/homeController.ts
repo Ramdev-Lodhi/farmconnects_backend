@@ -22,5 +22,18 @@ export default {
             tractors: Tractors
         }
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
+    }),
+    getItemByBrand: expressAsyncHandler(async (req: Request, res: Response) => {
+        const { brand } = new Tractor(req.body)
+
+        const tractors = await Tractor.find({ brand: brand })
+
+        if (!tractors || tractors.length === 0) {
+            return httpResponse(req, res, 404, responseMessage.NOT_FOUND('Tractors'), { message: 'No tractors found for this brand' })
+        }
+        const data = {
+            tractors: tractors
+        }
+        httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
     })
 }

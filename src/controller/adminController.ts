@@ -6,6 +6,7 @@ import { Banner } from '../model/Banner'
 import { Brand } from '../model/BrandM'
 import { Tractor } from '../model/TractorM'
 import httpError from '../util/httpError'
+import { Service } from '../model/ServiceM'
 
 export default {
     insertBanners: expressAsyncHandler(async (req: Request, res: Response) => {
@@ -37,6 +38,11 @@ export default {
         tractorData.tractor_image = req.file ? req.file.path : ''
 
         const savedata = await tractorData.save()
+        httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
+    }),
+    insertService: expressAsyncHandler(async (req: Request, res: Response) => {
+        const ServiceData = new Service(req.body)
+        const savedata = await ServiceData.save()
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
     })
 }

@@ -5,11 +5,13 @@ import expressAsyncHandler from 'express-async-handler'
 import { Banner } from '../model/Banner'
 import { Brand } from '../model/BrandM'
 import { Tractor } from '../model/TractorM'
+import { Service } from '../model/ServiceM'
 
 export default {
     getHome: expressAsyncHandler(async (req: Request, res: Response) => {
         const allBanners = await Banner.find()
         const allBrand = await Brand.find()
+        const allServices = await Service.find()
         // const Tractors = await Tractor.find()
         // const Tractors = await Tractor.find().sort({ $natural: -1 }).exec()
         const totalCount = await Tractor.countDocuments()
@@ -18,6 +20,7 @@ export default {
         const Tractors = await Tractor.aggregate([{ $sample: { size: totalCount } }])
         const data = {
             banners: allBanners,
+            services: allServices,
             brands: allBrand,
             tractors: Tractors
         }

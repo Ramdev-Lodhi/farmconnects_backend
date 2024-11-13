@@ -21,19 +21,15 @@ const rentSchema = new mongoose.Schema({
     },
     state: {
         type: String
-        // required: true,
     },
     district: {
         type: String
-        // required: true,
     },
     sub_district: {
         type: String
-        // required: true,
     },
     village: {
         type: String
-        // required: true,
     },
     pincode: {
         type: String

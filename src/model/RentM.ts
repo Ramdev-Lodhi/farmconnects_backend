@@ -49,15 +49,15 @@ const rentSchema = new mongoose.Schema({
                 type: String,
                 enum: ['Pending', 'Approved', 'Rejected'],
                 default: 'Pending'
-            },
-            requestedFrom: {
-                type: Date,
-                required: true
-            },
-            requestedTo: {
-                type: Date,
-                required: true
             }
+            // requestedFrom: {
+            //     type: Date,
+            //     required: true
+            // },
+            // requestedTo: {
+            //     type: Date,
+            //     required: true
+            // }
         }
     ]
 })

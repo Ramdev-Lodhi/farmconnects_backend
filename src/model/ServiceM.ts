@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const rentalSchema = new mongoose.Schema({
-    serviceType: {
+    service: {
         type: String,
         require: true,
         trim: true

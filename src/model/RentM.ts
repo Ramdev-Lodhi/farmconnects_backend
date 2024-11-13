@@ -34,12 +34,14 @@ const rentSchema = new mongoose.Schema({
     pincode: {
         type: String
     },
+    image: {
+        type: String
+    },
     serviceRequests: [
         {
             requestedBy: {
                 type: Schema.Types.ObjectId,
-                ref: 'UserM',
-                required: true
+                ref: 'UserM'
             },
             requestStatus: {
                 type: String,

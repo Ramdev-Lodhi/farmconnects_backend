@@ -5,22 +5,20 @@ const rentSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'userM'
     },
-    userInfo: [
-        {
-            name: {
-                type: String,
-                trim: true
-            },
-            mobile: {
-                type: String
-            },
-            email: {
-                type: String,
-                trim: true,
-                lowercase: true
-            }
+    userInfo: {
+        name: {
+            type: String,
+            trim: true
+        },
+        mobile: {
+            type: String
+        },
+        email: {
+            type: String,
+            trim: true,
+            lowercase: true
         }
-    ],
+    },
     serviceType: {
         type: String,
         require: true,

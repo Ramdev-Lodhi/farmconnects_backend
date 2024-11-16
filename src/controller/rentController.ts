@@ -30,5 +30,12 @@ export default {
         const savedata = await RentData.save()
 
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
+    }),
+    getRentItem: expressAsyncHandler(async (req: Request, res: Response) => {
+        const { pincode } = new Rent(req.body)
+
+        const data = await Rent.find({ pincode: pincode })
+
+        httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
     })
 }

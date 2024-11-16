@@ -5,37 +5,59 @@ const rentSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'userM'
     },
-    modelName: {
-        type: String,
-        require: true,
-        trim: true
-    },
-    brand: {
-        type: String,
-        require: true,
-        trim: true
-    },
-    category: {
+    serviceType: {
         type: String,
         require: true,
         trim: true
     },
     price: {
-        type: Number,
+        type: String,
         require: true,
         trim: true
     },
-    timeDuration: {
-        startTime: {
-            type: Date
-        },
-        endTime: {
-            type: Date
-        }
+    rentedStatus: {
+        type: Boolean,
+        default: false
     },
-    status: {
-        type: Boolean
-    }
+    state: {
+        type: String
+    },
+    district: {
+        type: String
+    },
+    sub_district: {
+        type: String
+    },
+    village: {
+        type: String
+    },
+    pincode: {
+        type: String
+    },
+    image: {
+        type: String
+    },
+    serviceRequests: [
+        {
+            requestedBy: {
+                type: Schema.Types.ObjectId,
+                ref: 'UserM'
+            },
+            requestStatus: {
+                type: String,
+                enum: ['Pending', 'Approved', 'Rejected'],
+                default: 'Pending'
+            }
+            // requestedFrom: {
+            //     type: Date,
+            //     required: true
+            // },
+            // requestedTo: {
+            //     type: Date,
+            //     required: true
+            // }
+        }
+    ]
 })
 const Rent = mongoose.model('Rent', rentSchema)
 export { Rent }

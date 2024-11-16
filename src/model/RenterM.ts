@@ -3,35 +3,32 @@ import mongoose, { Schema } from 'mongoose'
 const rentalSchema = new mongoose.Schema({
     userId: {
         type: Schema.Types.ObjectId,
-        ref: 'userM'
+        ref: 'UserM'
     },
-    modelName: {
-        type: String,
-        require: true,
-        trim: true
+    OwnerID: {
+        type: Schema.Types.ObjectId,
+        ref: 'UserM'
     },
-    brand: {
-        type: String,
-        require: true,
-        trim: true
+    RentID: {
+        type: Schema.Types.ObjectId,
+        ref: 'RentM'
     },
-    category: {
+    serviceType: {
         type: String,
         require: true,
         trim: true
     },
     price: {
-        type: Number,
+        type: String,
         require: true,
         trim: true
     },
-    timeDuration: {
-        startTime: {
-            type: Date
-        },
-        endTime: {
-            type: Date
-        }
+    address: {
+        type: String
+    },
+    description: {
+        type: String,
+        required: true
     }
 })
 const Rental = mongoose.model('Rental', rentalSchema)

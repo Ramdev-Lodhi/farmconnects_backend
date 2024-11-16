@@ -6,6 +6,8 @@ import { Banner } from '../model/Banner'
 import { Brand } from '../model/BrandM'
 import { Tractor } from '../model/TractorM'
 import httpError from '../util/httpError'
+import { ImplementBrand } from '../model/ImplementBrandM'
+import { Implements } from '../model/ImplementsM'
 
 export default {
     insertBanners: expressAsyncHandler(async (req: Request, res: Response) => {
@@ -37,6 +39,26 @@ export default {
         tractorData.tractor_image = req.file ? req.file.path : ''
 
         const savedata = await tractorData.save()
+        httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
+    }),
+    insertImplementBrand: expressAsyncHandler(async (req: Request, res: Response) => {
+        const { name } = new ImplementBrand(req.body)
+
+        const brandPath = req.file ? req.file.path : ''
+        // Assuming you're creating a new Register entry with the brand image
+        const newData = new ImplementBrand({ logo: brandPath, name: name })
+        // Save the data to the database
+        const saveUser = await newData.save()
+        httpResponse(req, res, 200, 'brand Upload Successful', saveUser)
+    }),
+    insertImplements: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const implementData = new Implements(req.body)
+        if (!implementData) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        }
+        implementData.implement_image = req.file ? req.file.path : ''
+
+        const savedata = await implementData.save()
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
     })
 }

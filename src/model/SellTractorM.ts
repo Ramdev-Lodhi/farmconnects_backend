@@ -38,7 +38,7 @@ const selltractorSchema = new mongoose.Schema({
         trim: true
     },
     manufacturingYear: {
-        type: Number,
+        type: String,
         require: true,
         trim: true
     },
@@ -48,12 +48,12 @@ const selltractorSchema = new mongoose.Schema({
         trim: true
     },
     enginePower: {
-        type: Number,
+        type: String,
         require: true,
         trim: true
     },
     RC: {
-        type: Boolean,
+        type: String,
         require: true,
         trim: true
     },
@@ -67,13 +67,13 @@ const selltractorSchema = new mongoose.Schema({
         require: true,
         trim: true
     },
-    image: {
-        type: String
-    },
-    days: {
+    price: {
         type: String,
         require: true,
         trim: true
+    },
+    image: {
+        type: String
     }
 })
 

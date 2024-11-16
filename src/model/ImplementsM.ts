@@ -6,7 +6,7 @@ const implementSchema = new mongoose.Schema({
         require: true,
         trim: true
     },
-    image: {
+    implement_image: {
         type: String,
         require: true
     },

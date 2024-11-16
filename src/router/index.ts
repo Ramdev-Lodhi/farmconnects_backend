@@ -4,6 +4,7 @@ import userRoute from './apiRouter'
 import healthRoute from './healthRouter'
 import adminRouter from './adminRouter'
 import homeRouter from './homeRouter'
+import sellRouter from './sellRouter'
 const router = Router()
 const defaultRoutes = [
     {
@@ -25,6 +26,10 @@ const defaultRoutes = [
     {
         path: '/home',
         route: homeRouter
+    },
+    {
+        path: '/sell',
+        route: sellRouter
     }
 ]
 

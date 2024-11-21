@@ -228,13 +228,6 @@ export default {
         }
     }),
 
-    token_validation: asyncHandler((req: Request, res: Response) => {
-        const data = {
-            isvalid: true
-        }
-        httpResponse(req, res, 200, 'Token Valid', data)
-    }),
-
     verifyOtpCode: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const { phone, otp } = new OtpModel(req.body)
         // logger.info('phone', { meta: { phone, otp } })
@@ -290,5 +283,11 @@ export default {
         }
 
         httpResponse(req, res, 200, 'OTP verified successfully.', data)
+    }),
+    token_validation: asyncHandler((req: Request, res: Response) => {
+        const data = {
+            isvalid: true
+        }
+        httpResponse(req, res, 200, responseMessage.TOKEN_SUCCESS, data)
     })
 }

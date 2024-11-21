@@ -1,12 +1,13 @@
 import { Router } from 'express'
 import authController from '../controller/authController'
-
+import auth from '../middleware/auth'
 const router = Router()
 
 router.route('/register').post(authController.registerUser)
 router.route('/login').post(authController.loginUser)
 router.route('/loginpassword').post(authController.loginUserwithpassword)
 router.route('/logout').get(authController.logoutUser)
+router.route('/token_check').get(auth, authController.token_validation)
 
 // Google login route
 router.route('/google').post(authController.googleLogin)

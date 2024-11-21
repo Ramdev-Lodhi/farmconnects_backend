@@ -285,9 +285,6 @@ export default {
         httpResponse(req, res, 200, 'OTP verified successfully.', data)
     }),
     token_validation: asyncHandler((req: Request, res: Response) => {
-        const data = {
-            isvalid: true
-        }
-        httpResponse(req, res, 200, responseMessage.TOKEN_SUCCESS, data)
+        httpResponse(req, res, 200, responseMessage.TOKEN_SUCCESS)
     })
 }

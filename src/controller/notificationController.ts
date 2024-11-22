@@ -24,6 +24,6 @@ export default {
             token
         }
         const response = await admin.messaging().send(message)
-        httpResponse(req, res, 200, responseMessage.USERS_FETCHED, response)
+        httpResponse(req, res, 200, responseMessage.NOTIFICATION, response)
     })
 }

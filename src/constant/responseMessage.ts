@@ -15,5 +15,6 @@ export default {
     LOGIN_FAILED: `Invalid email or password`,
     LOGOUT: 'Logout Successfully',
     LOGOUT_FAILED: 'Failed to log out.',
-    TOKEN_SUCCESS: 'Token Valid'
+    TOKEN_SUCCESS: 'Token Valid',
+    NOTIFICATION: 'Send Notification Success'
 }

@@ -3,6 +3,5 @@ import NotificationController from '../controller/notificationController'
 
 const router = express.Router()
 
-router.post('/send-notification', NotificationController.sendNotification)
-
+router.route('/send-notification').post(NotificationController.sendNotification)
 export default router

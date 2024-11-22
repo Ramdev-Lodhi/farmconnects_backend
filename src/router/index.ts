@@ -6,6 +6,7 @@ import adminRouter from './adminRouter'
 import homeRouter from './homeRouter'
 import rentRouter from './rentRouter'
 import sellRouter from './sellRouter'
+import contactRouter from './contactRouter'
 
 const router = Router()
 const defaultRoutes = [
@@ -37,6 +38,11 @@ const defaultRoutes = [
     {
         path: '/sell',
         route: sellRouter
+    },
+
+    {
+        path: '/contact',
+        route: contactRouter
     }
 ]
 

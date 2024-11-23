@@ -24,7 +24,10 @@ export default {
         if (!data) {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }
-
+        // Validate IDs before querying
+        if (!data.id || !data.loginid) {
+            return httpError(next, 'Invalid user data', req, 400)
+        }
         const userData = await Register.findById({ _id: data.id })
         const userLoginData = await Login.findById({ _id: data.loginid })
         if (!userData) {

@@ -6,16 +6,13 @@ const loginSchema = new mongoose.Schema(
             type: String,
             unique: true,
             trim: true,
-            lowercase: true,
-            required: true
+            lowercase: true
         },
         mobile: {
-            type: String,
-            required: true
+            type: String
         },
         password: {
-            type: String,
-            required: true
+            type: String
         }
     },
     {

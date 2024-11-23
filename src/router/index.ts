@@ -7,6 +7,7 @@ import homeRouter from './homeRouter'
 import rentRouter from './rentRouter'
 import sellRouter from './sellRouter'
 import contactRouter from './contactRouter'
+import notificationRoutes from './notificationRoutes'
 
 const router = Router()
 const defaultRoutes = [
@@ -43,6 +44,10 @@ const defaultRoutes = [
     {
         path: '/contact',
         route: contactRouter
+    },
+    {
+        path: '/notification',
+        route: notificationRoutes
     }
 ]
 

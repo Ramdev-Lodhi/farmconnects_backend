@@ -216,13 +216,15 @@ export default {
 
     requestOtp: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const { phone } = new OtpModel(req.body)
-
         const otp = generateOtp()
         logger.info('phone', { meta: { phone, otp } })
         await storeOtp(phone, otp)
         const status = await sendOtpSms(phone, otp)
+        const data = {
+            otp: otp
+        }
         if (status) {
-            httpResponse(req, res, 200, 'OTP sent to your mobile number.')
+            httpResponse(req, res, 200, 'OTP sent to your mobile number.', data)
         } else {
             httpError(next, 'OTP not sent. Please try again..', req, 500)
         }

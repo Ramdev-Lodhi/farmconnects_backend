@@ -1,6 +1,10 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 const selltractorSchema = new mongoose.Schema({
+    sellerId: {
+        type: Schema.Types.ObjectId,
+        ref: 'userM'
+    },
     location: {
         type: String,
         require: true,

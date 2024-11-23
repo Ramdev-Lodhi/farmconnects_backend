@@ -6,9 +6,11 @@ import { Brand } from '../model/BrandM'
 import { Tractor } from '../model/TractorM'
 import httpError from '../util/httpError'
 import { SellTractor } from '../model/SellTractorM'
-import logger from '../util/logger'
-// import logger from '../util/logger'
-
+import { Register } from '../model/UserM'
+interface User {
+    id: string
+    loginid: string
+}
 export default {
     getBrand: expressAsyncHandler(async (req: Request, res: Response) => {
         const allBrand = await Brand.find()
@@ -34,16 +36,16 @@ export default {
     }),
     insertselltractor: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const sellTractorData = new SellTractor(req.body)
-        logger.info('data', {
-            meta: {
-                sellTractorData
-            }
-        })
+        const data = req.user as User | undefined
         if (!sellTractorData) {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }
+        if (!data) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        }
         sellTractorData.image = req.file ? req.file.path : ''
-
+        const userData = await Register.findById({ _id: data.id })
+        sellTractorData.sellerId = userData ? userData._id : null
         const savedata = await sellTractorData.save()
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
     }),

@@ -29,7 +29,7 @@ const sellContactSchema = new mongoose.Schema({
             type: String,
             trim: true
         },
-        sellName: {
+        sellmodelName: {
             type: String,
             trim: true
         },

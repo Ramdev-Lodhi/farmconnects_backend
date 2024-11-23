@@ -5,7 +5,7 @@ import httpResponse from '../util/httpResponse'
 import responseMessage from '../constant/responseMessage'
 import { SellContact } from '../model/Sell_contact_enquiryM'
 import { Register } from '../model/UserM'
-import { rentContact } from '../model/Rent_contact_enquiryM'
+import { rentContact } from '../model/rent_contact_enquiryM'
 interface User {
     id: string
     loginid: string

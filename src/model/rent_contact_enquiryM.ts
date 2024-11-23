@@ -39,5 +39,5 @@ const rentContactSchema = new mongoose.Schema({
         // }
     }
 })
-const rentContact = mongoose.model('Sell_contact_enquiry', rentContactSchema)
+const rentContact = mongoose.model('rent_contact_enquiry', rentContactSchema)
 export { rentContact }

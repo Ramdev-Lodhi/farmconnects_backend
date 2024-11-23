@@ -5,6 +5,9 @@ const rentalSchema = new mongoose.Schema({
         type: String,
         require: true,
         trim: true
+    },
+    image: {
+        type: String
     }
 })
 const Service = mongoose.model('Service', rentalSchema)

@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 
-const rentContactSchema = new mongoose.Schema({
+const sellContactSchema = new mongoose.Schema({
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'userM'
@@ -21,23 +21,23 @@ const rentContactSchema = new mongoose.Schema({
         trim: true
     },
 
-    renterInfo: {
-        renterID: {
+    sellerInfo: {
+        sellerID: {
             type: String
         },
-        rent_image: {
+        sell_image: {
             type: String,
             trim: true
         },
-        rentserviceName: {
+        sellName: {
+            type: String,
+            trim: true
+        },
+        sellBrand: {
             type: String,
             trim: true
         }
-        // rentBrand: {
-        //     type: String,
-        //     trim: true
-        // }
     }
 })
-const rentContact = mongoose.model('Sell_contact_enquiry', rentContactSchema)
-export { rentContact }
+const SellContact = mongoose.model('Sell_contact_enquiry', sellContactSchema)
+export { SellContact }

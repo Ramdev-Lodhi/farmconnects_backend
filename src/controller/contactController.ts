@@ -22,8 +22,12 @@ export default {
         const savedata = await sellTractorData.save()
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
     }),
-    getSellenquiry: expressAsyncHandler(async (req: Request, res: Response) => {
-        const sellEnquirydata = await SellContact.find()
+    getSellenquiry: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const userdata = req.user as User | undefined
+        if (!userdata) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        }
+        const sellEnquirydata = await SellContact.find({ 'sellerInfo.sellerID': userdata.id })
         const data = {
             sellenquiry: sellEnquirydata
         }

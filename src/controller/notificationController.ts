@@ -57,7 +57,7 @@ export default {
     //     httpResponse(req, res, 200, responseMessage.NOTIFICATION)
     // })
     sendContactNotification: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const { id, message, image } = req.body
+        const { id, title, message, image } = req.body
 
         if (!id || !message) {
             return httpError(next, 'Seller phone and message are required!', req, 400)
@@ -80,7 +80,7 @@ export default {
                 await admin.messaging().send({
                     token: token,
                     notification: {
-                        title: 'Farmer Contact Request',
+                        title: `${title}`,
                         body: `${message}`,
                         imageUrl: `${image}`
                     }

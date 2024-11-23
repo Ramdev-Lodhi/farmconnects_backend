@@ -16,13 +16,22 @@ import logger from '../util/logger'
 interface GoogleLoginRequest extends Request {
     body: {
         token: string
+        deviceToken: string
     }
 }
 interface LoginRequestpassword extends Request {
     body: {
         phone_or_email: string
         password: string
+        deviceToken: string
     }
+}
+interface DeviceToken {
+    deviceToken: string
+}
+interface User {
+    id: string
+    loginid: string
 }
 const client = new OAuth2Client(GOOGLE_CLIENT_ID)
 export default {
@@ -88,7 +97,7 @@ export default {
         httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, data)
     }),
     loginUserwithpassword: asyncHandler(async (req: LoginRequestpassword, res: Response, next: NextFunction) => {
-        const { phone_or_email, password } = req.body
+        const { phone_or_email, password, deviceToken } = req.body
 
         // logger.info('user', { meta: { email: phone_or_email, mobile: phone_or_email, password: password } })
         const userExist = await Login.findOne({
@@ -112,6 +121,11 @@ export default {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }
 
+        if (!userInfo.deviceTokens.includes(deviceToken)) {
+            userInfo.deviceTokens.push(deviceToken)
+            await userInfo.save() // Save user with updated device token
+        }
+
         const token = jwtToken.generateToken({
             id: userInfo._id.toString(),
             loginid: userExist._id.toString(),
@@ -131,7 +145,7 @@ export default {
         httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, data)
     }),
     googleLogin: asyncHandler(async (req: GoogleLoginRequest, res: Response) => {
-        const { token } = req.body
+        const { token, deviceToken } = req.body
         const ticket = await client.verifyIdToken({
             idToken: token,
             audience: GOOGLE_CLIENT_ID
@@ -162,7 +176,8 @@ export default {
                 state: null,
                 district: null,
                 sub_district: null,
-                village: null
+                village: null,
+                deviceTokens: deviceToken
             })
             const login = new Login({
                 email: email,
@@ -174,6 +189,11 @@ export default {
             loginid = login._id.toString()
             userId = newUser._id.toString()
         } else {
+            if (!userExists.deviceTokens.includes(deviceToken)) {
+                userExists.deviceTokens.push(deviceToken)
+                await userExists.save()
+            }
+
             loginid = userExistsLogin?._id?.toString() ?? ''
             userId = userExists._id.toString()
             mobile = userExists.mobile ?? ''
@@ -197,21 +217,32 @@ export default {
         httpResponse(req, res, 200, responseMessage.LOGIN_SUCCESS, data)
     }),
 
-    logoutUser: asyncHandler((req: Request, res: Response, next: NextFunction) => {
-        const authorizationHeader = req.headers.authorization
-        const token = authorizationHeader ? authorizationHeader.split(' ')[1] : null
+    logoutUser: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const data = req.user as User | undefined
+        const { deviceToken } = req.body as DeviceToken
 
-        if (!token) {
-            return httpError(next, 'No token provided', req, 401)
+        // Check if user context exists
+        if (!data) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }
 
-        req.session.destroy((err) => {
-            if (err) {
-                return httpError(next, err, req, 500)
-            }
+        // Fetch the user by login ID
+        const user = await Register.findById(data.id)
+        if (!user) {
+            return httpError(next, 'User not found', req, 404)
+        }
 
-            httpResponse(req, res, 200, responseMessage.LOGOUT)
-        })
+        if (deviceToken) {
+            const initialTokenCount = user.deviceTokens.length
+            user.deviceTokens = user.deviceTokens.filter((token) => token !== deviceToken)
+            if (initialTokenCount !== user.deviceTokens.length) {
+                await user.save()
+                logger.info('Device token removed successfully', { meta: { deviceToken } })
+                return httpResponse(req, res, 200, responseMessage.LOGOUT, { deviceTokenRemoved: true })
+            }
+        }
+
+        return httpError(next, 'Device token not found', req, 400)
     }),
 
     requestOtp: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -232,6 +263,8 @@ export default {
 
     verifyOtpCode: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const { phone, otp } = new OtpModel(req.body)
+
+        const { deviceToken } = req.body as DeviceToken
         // logger.info('phone', { meta: { phone, otp } })
 
         const isValid = await verifyOtp(phone, otp)
@@ -253,7 +286,8 @@ export default {
                 state: null,
                 district: null,
                 sub_district: null,
-                village: null
+                village: null,
+                deviceTokens: deviceToken
             })
 
             const login = new Login({
@@ -265,6 +299,11 @@ export default {
             await Promise.all([login.save(), newUser.save()])
             user = newUser
             loginuser = login
+        }
+
+        if (!user.deviceTokens.includes(deviceToken)) {
+            user.deviceTokens.push(deviceToken)
+            await user.save()
         }
 
         const jwttoken = jwtToken.generateToken({

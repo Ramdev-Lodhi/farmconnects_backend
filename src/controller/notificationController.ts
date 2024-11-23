@@ -42,7 +42,6 @@ export default {
     //     if (!seller) {
     //         return httpError(next, 'Seller not found!', req, 404)
     //     }
-
     //     const tokens = seller.deviceTokens
     //     // Send notifications to all tokens
     //     const promises = tokens.map((token) =>
@@ -54,12 +53,11 @@ export default {
     //             }
     //         })
     //     )
-
     //     await Promise.all(promises)
     //     httpResponse(req, res, 200, responseMessage.NOTIFICATION)
     // })
     sendContactNotification: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const { id, message } = req.body
+        const { id, message, image } = req.body
 
         if (!id || !message) {
             return httpError(next, 'Seller phone and message are required!', req, 400)
@@ -83,7 +81,8 @@ export default {
                     token: token,
                     notification: {
                         title: 'Farmer Contact Request',
-                        body: `${message}`
+                        body: `${message}`,
+                        imageUrl: `${image}`
                     }
                 })
             } catch (error) {

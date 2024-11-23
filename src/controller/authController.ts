@@ -221,7 +221,6 @@ export default {
         const data = req.user as User | undefined
         const { deviceToken } = req.body as DeviceToken
 
-        // Check if user context exists
         if (!data) {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }

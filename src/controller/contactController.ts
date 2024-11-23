@@ -41,6 +41,7 @@ export default {
         const savedata = await rentData.save()
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
     }),
+
     getRentenquiry: expressAsyncHandler(async (req: Request, res: Response) => {
         const rentEnquirydata = await rentContact.find()
         const data = {

@@ -22,13 +22,7 @@ const selltractorSchema = new mongoose.Schema({
     },
     mobile: {
         type: String,
-        required: true,
-        validate: {
-            validator: function (v: string) {
-                return /^[0-9]{10}$/.test(v)
-            },
-            message: (props: { value: string }) => `${props.value} is not a valid mobile number!`
-        }
+        required: true
     },
 
     brand: {

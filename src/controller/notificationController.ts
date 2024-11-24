@@ -66,6 +66,7 @@ export default {
         )
 
         notificationResults.forEach((result, index) => {
+            logger.error(`Error for token: ${tokens[index]} - ${JSON.stringify(result)}`)
             if (result.status === 'rejected') {
                 const firebaseError = result.reason as FirebaseMessageResult
                 logger.error(`Error for token: ${tokens[index]} - ${JSON.stringify(result.reason)}`)

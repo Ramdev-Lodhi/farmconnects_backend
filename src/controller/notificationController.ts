@@ -21,6 +21,7 @@ export default {
             })
             return
         }
+
         const message = {
             notification: {
                 title,
@@ -28,25 +29,8 @@ export default {
             },
             token
         }
-        const invalidTokens: string[] = []
-        try {
-            await admin.messaging().send(message)
-        } catch (error) {
-            const firebaseError = error as FirebaseMessageResult
-            if (
-                firebaseError.error &&
-                (firebaseError.error.code === 'messaging/registration-token-not-registered' ||
-                    firebaseError.error.code === 'messaging/invalid-registration-token')
-            ) {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                invalidTokens.push(token)
-            }
-        }
-
-        if (invalidTokens.length > 0) {
-            await Register.updateMany({ deviceTokens: { $in: invalidTokens } }, { $pull: { deviceTokens: { $in: invalidTokens } } })
-        }
-        httpResponse(req, res, 200, responseMessage.NOTIFICATION, invalidTokens)
+        const response = await admin.messaging().send(message)
+        httpResponse(req, res, 200, responseMessage.NOTIFICATION, response)
     }),
     // sendContactNotification: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     //     const { id, message } = req.body
@@ -114,6 +98,8 @@ export default {
         })
 
         await Promise.all(notificationPromises)
+
+        // Remove invalid tokens from the database
         if (invalidTokens.length > 0) {
             await Register.updateMany({ deviceTokens: { $in: invalidTokens } }, { $pull: { deviceTokens: { $in: invalidTokens } } })
         }

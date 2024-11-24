@@ -32,30 +32,7 @@ export default {
         const response = await admin.messaging().send(message)
         httpResponse(req, res, 200, responseMessage.NOTIFICATION, response)
     }),
-    // sendContactNotification: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    //     const { id, message } = req.body
 
-    //     if (!id || !message) {
-    //         return httpError(next, 'Seller phone and message are required!', req, 404)
-    //     }
-    //     const seller = await Register.findOne({ _id: id })
-    //     if (!seller) {
-    //         return httpError(next, 'Seller not found!', req, 404)
-    //     }
-    //     const tokens = seller.deviceTokens
-    //     // Send notifications to all tokens
-    //     const promises = tokens.map((token) =>
-    //         admin.messaging().send({
-    //             token: token,
-    //             notification: {
-    //                 title: 'Farmer Contact Request',
-    //                 body: `Farmer ID: ${id} wants to contact you.`
-    //             }
-    //         })
-    //     )
-    //     await Promise.all(promises)
-    //     httpResponse(req, res, 200, responseMessage.NOTIFICATION)
-    // })
     sendContactNotification: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const { id, title, message, image } = req.body
 
@@ -63,7 +40,6 @@ export default {
             return httpError(next, 'Seller phone and message are required!', req, 400)
         }
 
-        // Find the seller by ID
         const seller = await Register.findOne({ _id: id })
         if (!seller) {
             return httpError(next, 'Seller not found!', req, 404)
@@ -75,31 +51,32 @@ export default {
         }
 
         const invalidTokens: string[] = []
-        const notificationPromises = tokens.map(async (token) => {
-            try {
-                await admin.messaging().send({
-                    token: token,
+        const notificationResults = await Promise.allSettled(
+            tokens.map((token) =>
+                admin.messaging().send({
+                    token,
                     notification: {
                         title: `${title}`,
                         body: `${message}`,
                         imageUrl: `${image}`
                     }
                 })
-            } catch (error) {
-                const firebaseError = error as FirebaseMessageResult
+            )
+        )
+
+        notificationResults.forEach((result, index) => {
+            if (result.status === 'rejected') {
+                const firebaseError = result.reason as FirebaseMessageResult
                 if (
                     firebaseError.error &&
                     (firebaseError.error.code === 'messaging/registration-token-not-registered' ||
                         firebaseError.error.code === 'messaging/invalid-registration-token')
                 ) {
-                    invalidTokens.push(token)
+                    invalidTokens.push(tokens[index])
                 }
             }
         })
 
-        await Promise.all(notificationPromises)
-
-        // Remove invalid tokens from the database
         if (invalidTokens.length > 0) {
             await Register.updateMany({ deviceTokens: { $in: invalidTokens } }, { $pull: { deviceTokens: { $in: invalidTokens } } })
         }

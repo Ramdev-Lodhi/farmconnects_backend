@@ -32,6 +32,11 @@ const rentContactSchema = new mongoose.Schema({
         rentserviceName: {
             type: String,
             trim: true
+        },
+        requestStatus: {
+            type: String,
+            enum: ['Pending', 'Approved', 'Rejected'],
+            default: 'Pending'
         }
         // rentBrand: {
         //     type: String,

@@ -53,7 +53,7 @@ export default {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }
         const rentEnquirydata = await rentContact.find({ 'renterInfo.renterID': userdata.id })
-        const rentRequestEnquirydata = await rentContact.find({ userID: userdata.id })
+        const rentRequestEnquirydata = await rentContact.find({ userId: userdata.id })
         const data = {
             rentenquiry: rentEnquirydata,
             rentRequestEnquirydata: rentRequestEnquirydata

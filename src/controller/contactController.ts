@@ -6,6 +6,7 @@ import responseMessage from '../constant/responseMessage'
 import { SellContact } from '../model/Sell_contact_enquiryM'
 import { Register } from '../model/UserM'
 import { rentContact } from '../model/rent_contact_enquiryM'
+import { BuyContact } from '../model/Buy_contact_enquiry'
 interface User {
     id: string
     loginid: string
@@ -46,10 +47,37 @@ export default {
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
     }),
 
-    getRentenquiry: expressAsyncHandler(async (req: Request, res: Response) => {
-        const rentEnquirydata = await rentContact.find()
+    getRentenquiry: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const userdata = req.user as User | undefined
+        if (!userdata) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        }
+        const rentEnquirydata = await rentContact.find({ 'renterInfo.renterID': userdata.id })
         const data = {
             rentenquiry: rentEnquirydata
+        }
+        httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
+    }),
+    insertBuyContact: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const buyData = new BuyContact(req.body)
+        const data = req.user as User | undefined
+        if (!data) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        }
+        const userData = await Register.findById({ _id: data.id })
+        buyData.userId = userData ? userData._id : null
+        const savedata = await buyData.save()
+        httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
+    }),
+
+    getBuyenquiry: expressAsyncHandler(async (req: Request, res: Response) => {
+        // const userdata = req.user as User | undefined
+        // if (!userdata) {
+        //     return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        // }
+        const buyEnquirydata = await BuyContact.find()
+        const data = {
+            buyenquiry: buyEnquirydata
         }
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
     })

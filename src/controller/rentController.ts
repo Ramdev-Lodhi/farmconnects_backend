@@ -38,5 +38,16 @@ export default {
             RentData: rentData
         }
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
+    }),
+    getRentItemByUserID: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const Tokendata = req.user as User | undefined
+        if (!Tokendata) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        }
+        const rentData = await Rent.find({ userId: Tokendata.id })
+        const data = {
+            RentData: rentData
+        }
+        httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
     })
 }

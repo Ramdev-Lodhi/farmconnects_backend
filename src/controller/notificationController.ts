@@ -21,7 +21,6 @@ export default {
             })
             return
         }
-
         const message = {
             notification: {
                 title,
@@ -29,8 +28,25 @@ export default {
             },
             token
         }
-        const response = await admin.messaging().send(message)
-        httpResponse(req, res, 200, responseMessage.NOTIFICATION, response)
+        const invalidTokens: string[] = []
+        try {
+            await admin.messaging().send(message)
+        } catch (error) {
+            const firebaseError = error as FirebaseMessageResult
+            if (
+                firebaseError.error &&
+                (firebaseError.error.code === 'messaging/registration-token-not-registered' ||
+                    firebaseError.error.code === 'messaging/invalid-registration-token')
+            ) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                invalidTokens.push(token)
+            }
+        }
+
+        if (invalidTokens.length > 0) {
+            await Register.updateMany({ deviceTokens: { $in: invalidTokens } }, { $pull: { deviceTokens: { $in: invalidTokens } } })
+        }
+        httpResponse(req, res, 200, responseMessage.NOTIFICATION, invalidTokens)
     }),
     // sendContactNotification: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     //     const { id, message } = req.body
@@ -74,7 +90,7 @@ export default {
             return httpError(next, 'No device tokens found for the seller!', req, 404)
         }
 
-        const invalidTokens: string[] = [] // To store invalid tokens
+        const invalidTokens: string[] = []
         const notificationPromises = tokens.map(async (token) => {
             try {
                 await admin.messaging().send({
@@ -97,10 +113,7 @@ export default {
             }
         })
 
-        // Wait for all notification promises to complete
         await Promise.all(notificationPromises)
-
-        // Remove invalid tokens from the database
         if (invalidTokens.length > 0) {
             await Register.updateMany({ deviceTokens: { $in: invalidTokens } }, { $pull: { deviceTokens: { $in: invalidTokens } } })
         }

@@ -70,12 +70,12 @@ export default {
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
     }),
 
-    getBuyenquiry: expressAsyncHandler(async (req: Request, res: Response) => {
-        // const userdata = req.user as User | undefined
-        // if (!userdata) {
-        //     return httpError(next, responseMessage.NOT_FOUND, req, 404)
-        // }
-        const buyEnquirydata = await BuyContact.find()
+    getBuyenquiry: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const userdata = req.user as User | undefined
+        if (!userdata) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        }
+        const buyEnquirydata = await BuyContact.find({ userId: userdata.id })
         const data = {
             buyenquiry: buyEnquirydata
         }

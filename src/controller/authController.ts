@@ -11,7 +11,7 @@ import { GOOGLE_CLIENT_ID } from '../config/googleConfig'
 import { generateOtp, storeOtp, verifyOtp } from '../service/otpService'
 import { sendOtpSms } from '../service/smsService'
 import { OtpModel } from '../model/otpM'
-import logger from '../util/logger'
+// import logger from '../util/logger'
 
 interface GoogleLoginRequest extends Request {
     body: {
@@ -236,7 +236,7 @@ export default {
             user.deviceTokens = user.deviceTokens.filter((token) => token !== deviceToken)
             if (initialTokenCount !== user.deviceTokens.length) {
                 await user.save()
-                logger.info('Device token removed successfully', { meta: { deviceToken } })
+                // logger.info('Device token removed successfully', { meta: { deviceToken } })
                 return httpResponse(req, res, 200, responseMessage.LOGOUT, { deviceTokenRemoved: true })
             }
         }
@@ -247,7 +247,7 @@ export default {
     requestOtp: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const { phone } = new OtpModel(req.body)
         const otp = generateOtp()
-        logger.info('phone', { meta: { phone, otp } })
+        // logger.info('phone', { meta: { phone, otp } })
         await storeOtp(phone, otp)
         const status = await sendOtpSms(phone, otp)
         const data = {

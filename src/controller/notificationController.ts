@@ -6,7 +6,7 @@ import httpResponse from '../util/httpResponse'
 import responseMessage from '../constant/responseMessage'
 import { Register } from '../model/UserM'
 import httpError from '../util/httpError'
-import logger from '../util/logger'
+// import logger from '../util/logger'
 interface FirebaseMessageResult {
     error?: {
         code: string
@@ -68,7 +68,7 @@ export default {
         notificationResults.forEach((result, index) => {
             if (result.status === 'rejected') {
                 const firebaseError = result.reason as FirebaseMessageResult
-                logger.error(`Error for token: ${tokens[index]} - ${JSON.stringify(result.reason)}`)
+                // logger.error(`Error for token: ${tokens[index]} - ${JSON.stringify(result.reason)}`)
                 invalidTokens.push(tokens[index])
                 if (
                     firebaseError.error &&
@@ -78,7 +78,7 @@ export default {
                     invalidTokens.push(tokens[index])
                 }
             } else {
-                logger.info(`Notification sent successfully to token: ${tokens[index]}`)
+                // logger.info(`Notification sent successfully to token: ${tokens[index]}`)
             }
         })
 

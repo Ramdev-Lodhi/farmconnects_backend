@@ -32,8 +32,13 @@ export default {
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedata)
     }),
     getRentItem: expressAsyncHandler(async (req: Request, res: Response) => {
-        const { pincode } = new Rent(req.body)
-        const rentData = await Rent.find({ pincode: pincode })
+        const { address } = new Rent(req.body)
+        if (!address || !address.pincode) {
+            return httpResponse(req, res, 400, 'Pincode is required.')
+        }
+
+        const { pincode } = address
+        const rentData = await Rent.find({ 'address.pincode': pincode })
         const data = {
             RentData: rentData
         }

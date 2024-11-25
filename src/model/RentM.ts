@@ -14,11 +14,13 @@ const rentSchema = new mongoose.Schema(
         serviceType: { type: String, required: true, trim: true },
         price: { type: String, required: true, trim: true },
         rentedStatus: { type: Boolean, default: true },
-        state: { type: String },
-        district: { type: String },
-        sub_district: { type: String },
-        village: { type: String },
-        pincode: { type: String },
+        address: {
+            state: { type: String },
+            district: { type: String },
+            sub_district: { type: String },
+            village: { type: String },
+            pincode: { type: String }
+        },
         image: { type: String },
         serviceRequests: [
             {

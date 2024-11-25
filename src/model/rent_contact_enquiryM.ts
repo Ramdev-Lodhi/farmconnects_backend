@@ -20,7 +20,6 @@ const rentContactSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-
     renterInfo: {
         renterID: {
             type: String
@@ -38,10 +37,6 @@ const rentContactSchema = new mongoose.Schema({
             enum: ['Pending', 'Approved', 'Rejected'],
             default: 'Pending'
         }
-        // rentBrand: {
-        //     type: String,
-        //     trim: true
-        // }
     }
 })
 const rentContact = mongoose.model('rent_contact_enquiry', rentContactSchema)

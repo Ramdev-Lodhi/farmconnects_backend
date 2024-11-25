@@ -114,45 +114,4 @@ export default {
         const savedData = await rentInstance.save()
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedData)
     })
-    // UpdateserviceRequests: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    //     const { id } = req.params
-    //     const data = req.user as User | undefined
-    //     if (!data) {
-    //         return httpError(next, responseMessage.NOT_FOUND, req, 404)
-    //     }
-    //     const userData = await Register.findById({ _id: data.id })
-    //     // Destructure serviceRequests from the body of the request
-    //     const { serviceRequests } = req.body
-    //     const userId = userData ? userData._id : null
-    //     // Fetch Rent instance by ID
-    //     const rentInstance = await Rent.findById(id)
-    //     if (!rentInstance) {
-    //         return httpError(next, responseMessage.NOT_FOUND, req, 404)
-    //     }
-
-    //     // Make sure serviceRequests is an array and iterate through it to push each request
-    //     if (Array.isArray(serviceRequests)) {
-    //         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    //         serviceRequests.forEach((request: any) => {
-    //             // Assuming `request` has the structure of serviceRequest as per your model
-    //             rentInstance.serviceRequests.push({
-    //                 requestedBy: userId,
-    //                 name: request.name,
-    //                 mobile: request.mobile,
-    //                 location: request.location,
-    //                 requestStatus: request.requestStatus || 'Pending',
-    //                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    //                 requestedFrom: new Date(request.requestedFrom), // Ensure valid Date
-    //                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    //                 requestedTo: new Date(request.requestedTo) // Ensure valid Date
-    //             })
-    //         })
-    //     } else {
-    //         return httpError(next, responseMessage.INVALID_DATA, req, 400)
-    //     }
-
-    //     // Save the updated document
-    //     const savedData = await rentInstance.save()
-    //     httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedData)
-    // })
 }

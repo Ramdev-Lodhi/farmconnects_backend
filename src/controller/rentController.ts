@@ -73,8 +73,8 @@ export default {
         const requestedBy = userData ? userData._id : null
 
         // const { serviceRequests } = new Rent(req.body)
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const { serviceRequests }: { serviceRequests: ServiceRequest[] } = req.body
+
+        const serviceRequests = req.body as ServiceRequest
         logger.info('serviceRequests', {
             meta: {
                 id: data ? data.id : '',
@@ -92,17 +92,17 @@ export default {
             }
         })
         // rentInstance.serviceRequests.push(serviceRequests)
-        serviceRequests.forEach((request: ServiceRequest) => {
-            rentInstance.serviceRequests.push({
-                requestedBy: requestedBy,
-                name: request.name,
-                mobile: request.mobile,
-                location: request.location,
-                requestStatus: request.requestStatus || 'Pending',
-                requestedFrom: new Date(request.requestedFrom),
-                requestedTo: new Date(request.requestedTo)
-            })
+
+        rentInstance.serviceRequests.push({
+            requestedBy: requestedBy,
+            name: serviceRequests.name,
+            mobile: serviceRequests.mobile,
+            location: serviceRequests.location,
+            requestStatus: serviceRequests.requestStatus || 'Pending',
+            requestedFrom: new Date(serviceRequests.requestedFrom),
+            requestedTo: new Date(serviceRequests.requestedTo)
         })
+
         logger.info('rentInstance2', {
             meta: {
                 id: data ? data.id : '',

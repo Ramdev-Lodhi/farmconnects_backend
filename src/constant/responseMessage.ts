@@ -16,5 +16,6 @@ export default {
     LOGOUT: 'Logout Successfully',
     LOGOUT_FAILED: 'Failed to log out.',
     TOKEN_SUCCESS: 'Token Valid',
-    NOTIFICATION: 'Send Notification Success'
+    NOTIFICATION: 'Send Notification Success',
+    INVALID_DATA: 'INVALID DATA'
 }

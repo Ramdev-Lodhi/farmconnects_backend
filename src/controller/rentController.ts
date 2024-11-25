@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { NextFunction, Request, Response } from 'express'
 import httpResponse from '../util/httpResponse'
 import responseMessage from '../constant/responseMessage'
@@ -57,14 +59,37 @@ export default {
     }),
     UpdateserviceRequests: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params
-        // const rentInstance = new Rent(req.body)
-        // const serviceRequests = rentInstance.serviceRequests
-        const { serviceRequests } = new Rent(req.body)
+
+        // Destructure serviceRequests from the body of the request
+        const { serviceRequests } = req.body
+
+        // Fetch Rent instance by ID
         const rentInstance = await Rent.findById(id)
         if (!rentInstance) {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }
-        rentInstance.serviceRequests.push(serviceRequests)
+
+        // Make sure serviceRequests is an array and iterate through it to push each request
+        if (Array.isArray(serviceRequests)) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            serviceRequests.forEach((request: any) => {
+                // Assuming `request` has the structure of serviceRequest as per your model
+                rentInstance.serviceRequests.push({
+                    requestedBy: request.requestedBy,
+                    name: request.name,
+                    mobile: request.mobile,
+                    location: request.location,
+                    requestStatus: request.requestStatus || 'Pending', // Default to 'Pending' if not specified
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                    requestedFrom: new Date(request.requestedFrom), // Ensure valid Date
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                    requestedTo: new Date(request.requestedTo) // Ensure valid Date
+                })
+            })
+        } else {
+            // If serviceRequests is not an array, return an error response
+            return httpError(next, responseMessage.INVALID_DATA, req, 400)
+        }
 
         // Save the updated document
         const savedData = await rentInstance.save()

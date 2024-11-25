@@ -99,8 +99,8 @@ export default {
             mobile: serviceRequests.mobile,
             location: serviceRequests.location,
             requestStatus: serviceRequests.requestStatus || 'Pending',
-            requestedFrom: new Date(serviceRequests.requestedFrom),
-            requestedTo: new Date(serviceRequests.requestedTo)
+            requestedFrom: serviceRequests.requestedFrom.toISOString().split('T')[0],
+            requestedTo: serviceRequests.requestedTo.toISOString().split('T')[0]
         })
 
         logger.info('rentInstance2', {

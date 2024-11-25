@@ -59,10 +59,14 @@ export default {
     }),
     UpdateserviceRequests: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params
-
+        const data = req.user as User | undefined
+        if (!data) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        }
+        const userData = await Register.findById({ _id: data.id })
         // Destructure serviceRequests from the body of the request
         const { serviceRequests } = req.body
-
+        const userId = userData ? userData._id : null
         // Fetch Rent instance by ID
         const rentInstance = await Rent.findById(id)
         if (!rentInstance) {
@@ -75,7 +79,7 @@ export default {
             serviceRequests.forEach((request: any) => {
                 // Assuming `request` has the structure of serviceRequest as per your model
                 rentInstance.serviceRequests.push({
-                    requestedBy: request.requestedBy,
+                    requestedBy: userId,
                     name: request.name,
                     mobile: request.mobile,
                     location: request.location,

@@ -6,6 +6,7 @@ import { Rent } from '../model/RentM'
 import httpError from '../util/httpError'
 import { Register } from '../model/UserM'
 import logger from '../util/logger'
+
 interface User {
     id: string
     loginid: string
@@ -99,8 +100,8 @@ export default {
             mobile: serviceRequests.mobile,
             location: serviceRequests.location,
             requestStatus: serviceRequests.requestStatus || 'Pending',
-            requestedFrom: serviceRequests.requestedFrom.toISOString().split('T')[0],
-            requestedTo: serviceRequests.requestedTo.toISOString().split('T')[0]
+            requestedFrom: new Date('2024-08-20'),
+            requestedTo: new Date('2024-08-20')
         })
 
         logger.info('rentInstance2', {

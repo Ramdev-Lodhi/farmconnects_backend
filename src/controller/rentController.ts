@@ -54,5 +54,20 @@ export default {
             RentData: rentData
         }
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
+    }),
+    UpdateserviceRequests: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params
+        // const rentInstance = new Rent(req.body)
+        // const serviceRequests = rentInstance.serviceRequests
+        const { serviceRequests } = new Rent(req.body)
+        const rentInstance = await Rent.findById(id)
+        if (!rentInstance) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        }
+        rentInstance.serviceRequests.push(serviceRequests)
+
+        // Save the updated document
+        const savedData = await rentInstance.save()
+        httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedData)
     })
 }

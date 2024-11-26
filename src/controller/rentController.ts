@@ -95,9 +95,9 @@ export default {
 
         rentInstance.serviceRequests.push({
             requestedBy: requestedBy,
-            name: serviceRequest.name || 'Name',
-            mobile: serviceRequest.mobile || '+911234567892',
-            location: serviceRequest.location || 'Location',
+            name: serviceRequest['name'] || 'Name',
+            mobile: serviceRequest['mobile'] || '+911234567892',
+            location: serviceRequest['location'] || 'Location',
             requestedFrom: new Date('2024-08-20'),
             requestedTo: new Date('2024-08-20')
         })

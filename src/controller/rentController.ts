@@ -74,14 +74,17 @@ export default {
 
         // const { serviceRequests } = new Rent(req.body)
 
-        const serviceRequestdata = req.body as ServiceRequest
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const { serviceRequests } = req.body
+        const serviceRequest = serviceRequests as ServiceRequest
+
         logger.info('Incoming Request Body', {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             body: req.body
         })
         logger.info('serviceRequests', {
             meta: {
-                serviceRequestdata
+                serviceRequest
             }
         })
         const rentInstance = await Rent.findById(id)
@@ -98,11 +101,11 @@ export default {
 
         rentInstance.serviceRequests.push({
             requestedBy: requestedBy,
-            name: serviceRequestdata.name || userData?.name,
-            mobile: serviceRequestdata.mobile || userData?.mobile,
-            location: serviceRequestdata.location || userData?.state,
-            requestedFrom: serviceRequestdata.requestedFrom ? new Date(serviceRequestdata.requestedFrom) : new Date(),
-            requestedTo: serviceRequestdata.requestedTo ? new Date(serviceRequestdata.requestedTo) : new Date()
+            name: serviceRequest.name || userData?.name,
+            mobile: serviceRequest.mobile || userData?.mobile,
+            location: serviceRequest.location || userData?.state,
+            requestedFrom: serviceRequest.requestedFrom ? new Date(serviceRequest.requestedFrom) : new Date(),
+            requestedTo: serviceRequest.requestedTo ? new Date(serviceRequest.requestedTo) : new Date()
         })
 
         logger.info('rentInstance2', {

@@ -72,16 +72,10 @@ export default {
         const userData = await Register.findById({ _id: data.id })
         const requestedBy = userData ? userData._id : null
 
-        // const { serviceRequests } = new Rent(req.body)
-
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { serviceRequests } = req.body
         const serviceRequest = serviceRequests as ServiceRequest
 
-        logger.info('Incoming Request Body', {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            body: req.body
-        })
         logger.info('serviceRequests', {
             meta: {
                 serviceRequest
@@ -91,13 +85,6 @@ export default {
         if (!rentInstance) {
             return httpError(next, responseMessage.NOT_FOUND, req, 404)
         }
-        logger.info('rentInstance', {
-            meta: {
-                id: data ? data.id : '',
-                rentInstance: rentInstance
-            }
-        })
-        // rentInstance.serviceRequests.push(serviceRequests)
 
         rentInstance.serviceRequests.push({
             requestedBy: requestedBy,
@@ -108,12 +95,6 @@ export default {
             requestedTo: serviceRequest.requestedTo ? new Date(serviceRequest.requestedTo) : new Date()
         })
 
-        logger.info('rentInstance2', {
-            meta: {
-                id: data ? data.id : '',
-                rentInstance: rentInstance
-            }
-        })
         // Save the updated document
         const savedData = await rentInstance.save()
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedData)

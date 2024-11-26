@@ -33,8 +33,8 @@ const rentSchema = new mongoose.Schema(
                     enum: ['Pending', 'Approved', 'Rejected'],
                     default: 'Pending'
                 },
-                requestedFrom: { type: Date, required: true },
-                requestedTo: { type: Date, required: true }
+                requestedFrom: { type: Date },
+                requestedTo: { type: Date }
             }
         ]
     },

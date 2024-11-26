@@ -78,7 +78,8 @@ export default {
         logger.info('serviceRequests', {
             meta: {
                 id: data ? data.id : '',
-                serviceRequests: serviceRequest
+                serviceRequests: serviceRequest,
+                name: serviceRequest.name
             }
         })
         const rentInstance = await Rent.findById(id)
@@ -95,11 +96,11 @@ export default {
 
         rentInstance.serviceRequests.push({
             requestedBy: requestedBy,
-            name: serviceRequest['name'] || 'Name',
-            mobile: serviceRequest['mobile'] || '+911234567892',
-            location: serviceRequest['location'] || 'Location',
-            requestedFrom: new Date('2024-08-20'),
-            requestedTo: new Date('2024-08-20')
+            name: serviceRequest.name || userData?.name,
+            mobile: serviceRequest.mobile || userData?.mobile,
+            location: serviceRequest.location || userData?.state,
+            requestedFrom: new Date(serviceRequest.requestedFrom),
+            requestedTo: new Date(serviceRequest.requestedTo)
         })
 
         logger.info('rentInstance2', {

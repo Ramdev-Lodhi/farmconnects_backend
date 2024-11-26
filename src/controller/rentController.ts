@@ -15,7 +15,6 @@ interface ServiceRequest {
     name: string
     mobile: string
     location: string
-    requestStatus?: 'Pending' | 'Approved' | 'Rejected'
     requestedFrom: Date
     requestedTo: Date
 }
@@ -75,11 +74,11 @@ export default {
 
         // const { serviceRequests } = new Rent(req.body)
 
-        const serviceRequests = req.body as ServiceRequest
+        const serviceRequest = req.body as ServiceRequest
         logger.info('serviceRequests', {
             meta: {
                 id: data ? data.id : '',
-                serviceRequests: serviceRequests
+                serviceRequests: serviceRequest
             }
         })
         const rentInstance = await Rent.findById(id)
@@ -96,10 +95,9 @@ export default {
 
         rentInstance.serviceRequests.push({
             requestedBy: requestedBy,
-            name: serviceRequests.name,
-            mobile: serviceRequests.mobile,
-            location: serviceRequests.location,
-            requestStatus: serviceRequests.requestStatus || 'Pending',
+            name: serviceRequest.name || 'Name',
+            mobile: serviceRequest.mobile || '+911234567892',
+            location: serviceRequest.location || 'Location',
             requestedFrom: new Date('2024-08-20'),
             requestedTo: new Date('2024-08-20')
         })

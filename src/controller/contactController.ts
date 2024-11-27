@@ -37,7 +37,7 @@ export default {
     getAllSellenquiry: expressAsyncHandler(async (req: Request, res: Response) => {
         const sellEnquirydata = await SellContact.find()
         const data = {
-            sellenquiry: sellEnquirydata
+            Allsellenquiry: sellEnquirydata
         }
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
     }),

@@ -105,5 +105,31 @@ export default {
         // Save the updated document
         const savedData = await rentInstance.save()
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, savedData)
+    }),
+    UpdateServiceRequestStatus: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const { id, requestId } = req.params
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const { requestStatus } = req.body
+        const Tokendata = req.user as User | undefined
+        if (!Tokendata) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        }
+        const rentInstance = await Rent.findOne({ _id: id })
+        if (!rentInstance) {
+            return httpError(next, responseMessage.NOT_FOUND, req, 404)
+        }
+        const serviceRequest = rentInstance.serviceRequests.find((request) => request._id.toString() === requestId)
+        if (!serviceRequest) {
+            return httpError(next, 'Service request not found', req, 404)
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        serviceRequest.requestStatus = requestStatus
+        await rentInstance.save()
+
+        httpResponse(req, res, 200, 'Service request status updated successfully', {
+            rentId: rentInstance._id,
+            serviceRequest
+        })
     })
 }

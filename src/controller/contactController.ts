@@ -34,6 +34,13 @@ export default {
         }
         httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
     }),
+    getAllSellenquiry: expressAsyncHandler(async (req: Request, res: Response) => {
+        const sellEnquirydata = await SellContact.find()
+        const data = {
+            Allsellenquiry: sellEnquirydata
+        }
+        httpResponse(req, res, 200, responseMessage.USERS_FETCHED, data)
+    }),
 
     insertRentContact: expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const rentData = new rentContact(req.body)

@@ -5,6 +5,7 @@ const router = Router()
 
 router.route('/sellContact').post(auth, contactController.insertSellContact)
 router.route('/getsellContact').get(auth, contactController.getSellenquiry)
+router.route('/getallsellContact').get(auth, contactController.getAllSellenquiry)
 router.route('/rentContact').post(auth, contactController.insertRentContact)
 router.route('/getrentContact').get(auth, contactController.getRentenquiry)
 router.route('/buyContact').post(auth, contactController.insertBuyContact)
